@@ -1,0 +1,33 @@
+{
+  "name": "language-cisco",
+  "version": "1.4.0",
+  "description": "Cisco IOS support in Atom",
+  "engines": {
+    "atom": "*"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diogoandre/language-cisco.git"
+  },
+  "readme": "# Cisco configuration files support in Atom\n\nAdds syntax highlighting to Cisco configuration files in Atom.\n\nCurrently focused on Cisco IOS configuration files, rather than command outputs\nor debugs\n\n![screenshot](https://raw.github.com/DiogoAndre/language-cisco/master/cisco.png)\n\n## Supported Filetypes\n\n* .cisco\n* .ios\n\nContributions are greatly appreciated. Please fork this repository and open a\npull request to add snippets, make grammar tweaks, etc.\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/diogoandre/language-cisco/issues"
+  },
+  "homepage": "https://github.com/diogoandre/language-cisco#readme",
+  "_id": "language-cisco@1.4.0",
+  "_shasum": "9c67ecfa27160b069b0918017158d34e639d7726",
+  "_resolved": "file:../d-115927-4449-10povwc/package.tgz",
+  "_from": "../d-115927-4449-10povwc/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "extensions": {
+      ".json": [
+        "package.json"
+      ]
+    },
+    "folders": []
+  }
+}

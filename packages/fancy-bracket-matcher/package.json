@@ -1,0 +1,33 @@
+{
+  "name": "fancy-bracket-matcher",
+  "version": "0.4.1",
+  "description": "Provides an obnoxiously fancy animated bracket matcher",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evpok/fancy-bracket-matcher.git"
+  },
+  "license": "WTFPL",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "readme": "Fancy bracket Matcher Atom Package\n==================================\n\nProvides an obnoxiously fancy animated bracket matcher. Inspired by https://discuss.atom.io/t/where-to-set-the-matched-brace-color.\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/evpok/fancy-bracket-matcher/issues"
+  },
+  "homepage": "https://github.com/evpok/fancy-bracket-matcher#readme",
+  "_id": "fancy-bracket-matcher@0.4.1",
+  "_shasum": "23efa7dea2e09f00a1c87f0669e35c21478c32dd",
+  "_resolved": "file:../d-116326-27687-2gqdab/package.tgz",
+  "_from": "../d-116326-27687-2gqdab/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "extensions": {
+      ".json": [
+        "package.json"
+      ]
+    },
+    "folders": []
+  }
+}

@@ -1,0 +1,2 @@
+'atom-text-editor':
+  'alt-cmd-r': 'run-in-atom:run-in-atom'

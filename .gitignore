@@ -1,0 +1,10 @@
+# Mac
+.DS_Store
+
+.apm
+.node-gyp
+blob-store
+compile-cache
+dev
+storage
+local-history

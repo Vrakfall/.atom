@@ -1,0 +1,51 @@
+{
+  "name": "cpp-refactor",
+  "main": "./lib/cpp-refactor",
+  "version": "2.2.0",
+  "description": "C++ refactoring tool",
+  "keywords": [
+    "c++",
+    "cpp",
+    "refactoring"
+  ],
+  "activationCommands": {
+    "atom-workspace": [
+      "cpp-refactor:find-class"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnickaBurova/cpp-refactor.git"
+  },
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {},
+  "readme": "# cpp-refactor package\n\nFeatures:\n* Find class declaration. This is very simple bruteforce to find where the class is declared. If the declaration is found, the file is opened at that positition.\n\nBy mistake I have published major version 2, and it didn't work to unpublished. So we have version 2:)\n\nI have moved non refactoring features in to package anca-misc.\n\n![A screenshot of your package](https://f.cloud.github.com/assets/69169/2290250/c35d867a-a017-11e3-86be-cd7c5bf3ff9b.gif)\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/AnickaBurova/cpp-refactor/issues"
+  },
+  "homepage": "https://github.com/AnickaBurova/cpp-refactor#readme",
+  "_id": "cpp-refactor@2.2.0",
+  "_shasum": "8d3f322b75b4430619699deef5e276de5c61a726",
+  "_resolved": "file:../d-116325-16730-16zou8i/package.tgz",
+  "_from": "../d-116325-16730-16zou8i/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "extensions": {
+      ".json": [
+        "coffeelint.json",
+        "package.json"
+      ],
+      ".coffee": [
+        "lib/cpp-refactor-class-info-view.coffee",
+        "lib/cpp-refactor-view.coffee",
+        "lib/cpp-refactor.coffee"
+      ]
+    },
+    "folders": []
+  }
+}

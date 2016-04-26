@@ -1,0 +1,4 @@
+'.platform-win32 atom-text-editor:not([mini]).omnisharp-editor':
+  'ctrl-n': 'advanced-open-file:toggle'
+':not(.platform-win32) atom-text-editor:not([mini]).omnisharp-editor':
+  'cmd-n': 'advanced-open-file:toggle'

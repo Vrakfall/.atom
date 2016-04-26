@@ -1,0 +1,47 @@
+"*":
+  "atom-beautify":
+    general:
+      _analyticsUserId: "019f9d48-7924-4bb0-aaea-26e23f3b3ec2"
+  autosave:
+    enabled: true
+  core:
+    disabledPackages: [
+      "linter-liferay"
+      "linter-jshint"
+      "atom-bracket-highlight"
+    ]
+    themes: [
+      "seti-ui"
+      "seti-syntax"
+    ]
+  editor:
+    backUpBeforeSaving: true
+    fontSize: 13
+    invisibles: {}
+    showIndentGuide: true
+    showInvisibles: true
+    softWrap: true
+  "exception-reporting":
+    userId: "7a697316-9921-f1d7-de82-6a644c2fb377"
+  "git-diff": {}
+  linter: {}
+  minimap:
+    absoluteMode: true
+  "omnisharp-atom":
+    enhancedHighlighting: true
+  "run-in-atom":
+    openDeveloperToolsOnRun: false
+  welcome:
+    showOnStartup: false
+".diff.source":
+  editor:
+    tabLength: 4
+".js.regexp.replacement.source":
+  editor:
+    tabLength: 4
+".js.regexp.source":
+  editor:
+    tabLength: 4
+".js.source":
+  editor:
+    tabLength: 4
