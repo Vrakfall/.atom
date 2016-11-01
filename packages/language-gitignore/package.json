@@ -1,34 +1,59 @@
 {
-  "name": "language-gitignore",
-  "version": "0.2.0",
+  "_args": [
+    [
+      {
+        "raw": "/mnt/data/tmp/d-116919-13046-9k45uw/package.tgz",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "/mnt/data/tmp/d-116919-13046-9k45uw/package.tgz",
+        "spec": "/mnt/data/tmp/d-116919-13046-9k45uw/package.tgz",
+        "type": "local"
+      },
+      "/mnt/data/tmp/apm-install-dir-116919-13046-htlw1b"
+    ]
+  ],
+  "_from": "../d-116919-13046-9k45uw/package.tgz",
+  "_id": "language-gitignore@0.3.0",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/language-gitignore",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "/mnt/data/tmp/d-116919-13046-9k45uw/package.tgz",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "/mnt/data/tmp/d-116919-13046-9k45uw/package.tgz",
+    "spec": "/mnt/data/tmp/d-116919-13046-9k45uw/package.tgz",
+    "type": "local"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "file:../d-116919-13046-9k45uw/package.tgz",
+  "_shasum": "fc6895cd4c0d10888cdb86015b045e1888051e1c",
+  "_shrinkwrap": null,
+  "_spec": "/mnt/data/tmp/d-116919-13046-9k45uw/package.tgz",
+  "_where": "/mnt/data/tmp/apm-install-dir-116919-13046-htlw1b",
+  "bugs": {
+    "url": "https://github.com/bsara/language-gitignore/issues"
+  },
+  "dependencies": {},
   "description": "Syntax highlighting for .gitignore files in Atom",
+  "devDependencies": {},
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "homepage": "https://github.com/bsara/language-gitignore#readme",
+  "license": "MIT",
+  "name": "language-gitignore",
+  "optionalDependencies": {},
+  "readme": "Syntax Highlighting for .gitignore Files in Atom\n================================================\n\n[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/bsara/language-gitignore/blob/master/LICENSE.md)\n\n[![Atom Package](https://img.shields.io/apm/v/language-gitignore.svg)](https://atom.io/packages/language-gitignore)\n[![Atom Package Downloads](https://img.shields.io/apm/dm/language-gitignore.svg)](https://atom.io/packages/language-gitignore)\n\n\nAdds syntax highlighting to .gitignore files in Atom.\n\n#### Header Blocks\n\nA \"Header Block\" is started and ended by a line that begins with `#` followed by any\ncharacter(s) (except a space), and ended by another `#`. (See the [gitignore sample file](https://github.com/bsara/language-gitignore/blob/master/sample.gitignore)\nfor an example of a valid \"Header Block\").\n\n#### Screenshot\n\n![Screenshot](https://raw.githubusercontent.com/bsara/language-gitignore/master/screenshot.png)\n\n***(Theme used in screenshot: \"Oscuro Syntax\"...which I have not yet finished but will soon)***\n",
+  "readmeFilename": "README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bsara/language-gitignore.git"
   },
-  "license": "MIT",
-  "engines": {
-    "atom": ">0.50.0"
-  },
-  "dependencies": {},
-  "readme": "Syntax Highlighting for .gitignore Files in Atom\n================================================\n\n[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/bsara/language-gitignore/blob/master/LICENSE.md)\n\n\nAdds syntax highlighting to .gitignore files in Atom.\n\nFor full list of supported formats for \"Header Blocks\", see the [header block samples page](https://github.com/bsara/language-gitignore/blob/master/samples-header-blocks.md).\n\n\n![Screenshot](https://raw.githubusercontent.com/bsara/language-gitignore/master/screenshot.png)\n\n***(Theme used in screenshot: \"Oscuro Syntax\"...which I have not yet finished but will soon)***\n",
-  "readmeFilename": "README.md",
-  "bugs": {
-    "url": "https://github.com/bsara/language-gitignore/issues"
-  },
-  "homepage": "https://github.com/bsara/language-gitignore#readme",
-  "_id": "language-gitignore@0.2.0",
-  "_shasum": "70337d87bb1ee685270d868879ae6f07617d62fb",
-  "_resolved": "file:../d-115928-20927-1x9ntuy/package.tgz",
-  "_from": "../d-115928-20927-1x9ntuy/package.tgz",
-  "_atomModuleCache": {
-    "version": 1,
-    "dependencies": [],
-    "extensions": {
-      ".json": [
-        "package.json"
-      ]
-    },
-    "folders": []
-  }
+  "version": "0.3.0"
 }

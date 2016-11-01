@@ -1,0 +1,69 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "/mnt/data/tmp/d-116919-13079-1mqw4j1/package.tgz",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "/mnt/data/tmp/d-116919-13079-1mqw4j1/package.tgz",
+        "spec": "/mnt/data/tmp/d-116919-13079-1mqw4j1/package.tgz",
+        "type": "local"
+      },
+      "/mnt/data/tmp/apm-install-dir-116919-13079-1vzgkvq"
+    ]
+  ],
+  "_from": "../d-116919-13079-1mqw4j1/package.tgz",
+  "_id": "minimap-split-diff@0.3.2",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/minimap-split-diff",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "/mnt/data/tmp/d-116919-13079-1mqw4j1/package.tgz",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "/mnt/data/tmp/d-116919-13079-1mqw4j1/package.tgz",
+    "spec": "/mnt/data/tmp/d-116919-13079-1mqw4j1/package.tgz",
+    "type": "local"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "file:../d-116919-13079-1mqw4j1/package.tgz",
+  "_shasum": "163954e7ba8306e47fb384d9b422351a831bad34",
+  "_shrinkwrap": null,
+  "_spec": "/mnt/data/tmp/d-116919-13079-1mqw4j1/package.tgz",
+  "_where": "/mnt/data/tmp/apm-install-dir-116919-13079-1vzgkvq",
+  "bugs": {
+    "url": "https://github.com/mupchrch/minimap-split-diff/issues"
+  },
+  "consumedServices": {
+    "minimap": {
+      "versions": {
+        "1.0.0": "consumeMinimapServiceV1"
+      }
+    }
+  },
+  "dependencies": {
+    "event-kit": ">= 0.7.2"
+  },
+  "description": "A minimap plugin for the Split Diff package",
+  "devDependencies": {},
+  "engines": {
+    "atom": ">= 1.3.0 < 2.0.0"
+  },
+  "homepage": "https://github.com/mupchrch/minimap-split-diff#readme",
+  "license": "MIT",
+  "main": "./lib/minimap-split-diff",
+  "name": "minimap-split-diff",
+  "optionalDependencies": {},
+  "readme": "# minimap-split-diff package\n\nA minimap plugin for the Split Diff package.\n\n![Minimap Split Diff plugin in action](https://github.com/mupchrch/minimap-split-diff/raw/master/demo.gif)\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mupchrch/minimap-split-diff.git"
+  },
+  "version": "0.3.2"
+}

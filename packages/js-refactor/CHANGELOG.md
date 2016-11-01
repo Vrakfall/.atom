@@ -1,3 +1,21 @@
+# v0.6.0 on 2015-09-08
+
+* Require Atom >=1.0.0, refactor ^0.6.0
+* Experimental support of ES6+ (Babel, stage >= 1)
+* Start migrating from coffeescript to babel
+* Improve esrefactor based on a most recent and active fork
+* Use babylon (the parser of babel) instead of esprima
+* Update estools (estraverse, escope) to latest version
+* Add debug util
+* Update travis config as latest atom/ci
+
+# v0.4.0-v0.4.5 on 2015-06-16
+
+* Republished and maintained by [hax](https://github.com/hax)
+* Disable features which use deprecated atom api
+* Rename directory `stylesheets` to `styles` as atom change
+* Fix tests
+
 # v0.3.0 on 2014/07/31
 
 * Obsolete old API.

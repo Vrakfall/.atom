@@ -12,6 +12,7 @@ export interface AjaxRequest {
     password?: string;
     hasContent?: boolean;
     crossDomain?: boolean;
+    withCredentials?: boolean;
     createXHR?: () => XMLHttpRequest;
     progressSubscriber?: Subscriber<any>;
     resultSelector?: <T>(response: AjaxResponse) => T;
@@ -42,7 +43,7 @@ export declare class AjaxObservable<T> extends Observable<T> {
      *
      * @example
      * source = Rx.Observable.ajax('/products');
-     * source = Rx.Observable.ajax( url: 'products', method: 'GET' });
+     * source = Rx.Observable.ajax({ url: 'products', method: 'GET' });
      *
      * @param {string|Object} request Can be one of the following:
      *   A string of the URL to make the Ajax call.
@@ -62,7 +63,6 @@ export declare class AjaxObservable<T> extends Observable<T> {
      * @name ajax
      * @owner Observable
     */
-    static _create_stub(): void;
     static create: AjaxCreationMethod;
     private request;
     constructor(urlOrRequest: string | AjaxRequest);
@@ -81,7 +81,7 @@ export declare class AjaxSubscriber<T> extends Subscriber<Event> {
     constructor(destination: Subscriber<T>, request: AjaxRequest);
     next(e: Event): void;
     private send();
-    private serializeBody(body, contentType);
+    private serializeBody(body, contentType?);
     private setHeaders(xhr, headers);
     private setupEvents(xhr, request);
     unsubscribe(): void;

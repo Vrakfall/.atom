@@ -1,7 +1,7 @@
-{ Context } = require '../vender/esrefactor'
+Context = require './Context'
 { parse } = require './parser'
 { Range } = require 'atom'
-d = (require 'debug') 'ripper'
+d = (require 'debug/browser') 'ripper'
 
 module.exports =
 class Ripper
@@ -22,21 +22,25 @@ class Ripper
     tolerant: true
     sourceType: 'module'
     allowReturnOutsideFunction: true
-    features:
-      # stage 2
-      'es7.asyncFunctions': true
-      'es7.exponentiationOperator': true
-      'es7.objectRestSpread': true
-      # stage 1
-      'es7.decorators': true
-      'es7.exportExtensions': true
-      'es7.trailingFunctionCommas': true
-      # TODO: wait estraverse support the new Node types (eg. BindingNode)
-      # stage 0
-      # 'es7.classProperties': true
-      # 'es7.comprehensions': true
-      # 'es7.doExpressions': true
-      # 'es7.functionBind': true
+    plugins: [
+      'asyncFunctions'
+      'asyncGenerators'
+      'classConstructorCall'
+      'classProperties'
+      'decorators'
+      'doExpressions'
+      'exponentiationOperator'
+      'exportExtensions'
+      'flow'
+      'functionBind'
+      'functionSent'
+      'jsx'
+      'objectRestSpread'
+      'trailingFunctionCommas'
+    ]
+    # Other options which maybe useful
+    # ecmaVersion: Infinity
+    # allowHashBang: true
 
   constructor: ->
     @context = new Context
@@ -46,7 +50,7 @@ class Ripper
 
   parse: (code, callback) ->
     try
-      d 'parse', code
+      # d 'parse', code
       rLine = /.*(?:\r?\n|\n?\r)/g
       @lines = (result[0].length while (result = rLine.exec code)?)
       @parseError = null
@@ -73,14 +77,39 @@ class Ripper
       pos += @lines[row]
     pos += column
 
-    identification = @context.identify pos
-    d 'identification at', pos, identification
-    return [] unless identification
+    binding = @context.identify pos
+    return [] unless binding
 
-    { declaration, references } = identification
-    if declaration? and not (declaration in references)
-      references.unshift declaration
-    ranges = []
-    for reference in references
-      ranges.push Ripper.locToRange reference.loc
+    declRange =
+      if binding.path.isImportSpecifier()
+        { imported, local } = binding.path.node
+        range = Ripper.locToRange local.loc
+        range.shorthand = local.start == imported.start
+        range.key = Ripper.locToRange imported.loc if not range.shorthand
+        range.delimiter = ' as '
+        range
+      else
+        Ripper.locToRange binding.identifier.loc
+    declRange.type = 'decl'
+
+    ranges = [declRange]
+
+    # filter undefined for ImportDefault
+    refPaths = binding.referencePaths.filter (p) -> p
+
+    ranges = ranges.concat refPaths.map (p) ->
+      range = Ripper.locToRange p.node.loc
+      range.type = 'ref'
+      if p.parentPath.isObjectProperty()
+        { key, shorthand } = p.parentPath.node
+        range.shorthand = shorthand
+        range.key = Ripper.locToRange key.loc if not shorthand
+        range.delimiter = ': '
+      range
+
+    ranges = ranges.concat binding.constantViolations.map (p) ->
+      node = p.node.left || p.node
+      range = Ripper.locToRange node.loc
+      range.type = 'mut'
+      range
     ranges

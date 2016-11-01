@@ -1,5 +1,22 @@
 
 <a name="1.2.3"></a>
+## [1.5.3](https://github.com/littlebee/git-time-machine/compare/1.5.2...1.5.3) (2016-05-145)
+Upgrade split diff dependency and fix deprecation.  Thanks Alhadis and Michael!   Very much appreciated.
+
+### Other Commits
+* [d968cb3](https://github.com/littlebee/git-time-machine/commit/d968cb37bc05825f266115a4858e086caf0ce80a) Merge pull request #61 from Alhadis/master
+* [a9ffea7](https://github.com/littlebee/git-time-machine/commit/a9ffea79e896f2dd7d8bc6d7fe93354ae1dd2402) Fix deprecation notice in package's entry point
+* [d8da44c](https://github.com/littlebee/git-time-machine/commit/d8da44c63740139c90579bbea46a92363d7b6a14) updates split diff dependency to v0.8.3
+
+## [1.5.2](https://github.com/littlebee/git-time-machine/compare/1.5.1...1.5.2) (2016-04-121)
+
+
+### Other Commits
+* [756d05a](https://github.com/littlebee/git-time-machine/commit/756d05a14dc9fb7c74a94c6e95cd189fdcd5e3c1) add horz scroll syncing (#57). config options coming in 2.0
+* [7c35f9b](https://github.com/littlebee/git-time-machine/commit/7c35f9b850e2db989120c6c0a0c3a16a1784f0d1) add trouble shooting section to README
+* [07aa7d1](https://github.com/littlebee/git-time-machine/commit/07aa7d1a71e2acb563e9cfeae21bd280f1f5db50) Adds keyboard shortcut to README.md
+* [0259ad6](https://github.com/littlebee/git-time-machine/commit/0259ad65d873daadf036370d1ba9275521ec202b) update split-diff to 0.7.5. fixes #38
+
 ## [1.5.1](https://github.com/littlebee/git-time-machine/compare/1.5.0...1.5.1) (2016-04-116)
 Improvements and upgrades to split-diff, differencing view.  Thank you @DSpeckhals.
 

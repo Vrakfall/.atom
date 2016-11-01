@@ -1,43 +1,64 @@
 {
-  "name": "filecolor",
+  "_args": [
+    [
+      {
+        "raw": "/mnt/data/tmp/d-11693-8664-1352zhi/package.tgz",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "/mnt/data/tmp/d-11693-8664-1352zhi/package.tgz",
+        "spec": "/mnt/data/tmp/d-11693-8664-1352zhi/package.tgz",
+        "type": "local"
+      },
+      "/mnt/data/tmp/apm-install-dir-11693-8664-nrha0p"
+    ]
+  ],
+  "_from": "../d-11693-8664-1352zhi/package.tgz",
+  "_id": "filecolor@0.4.0",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/filecolor",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "/mnt/data/tmp/d-11693-8664-1352zhi/package.tgz",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "/mnt/data/tmp/d-11693-8664-1352zhi/package.tgz",
+    "spec": "/mnt/data/tmp/d-11693-8664-1352zhi/package.tgz",
+    "type": "local"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "file:../d-11693-8664-1352zhi/package.tgz",
+  "_shasum": "b46d257a05e2a66251ae54dc7e6482264b79a101",
+  "_shrinkwrap": null,
+  "_spec": "/mnt/data/tmp/d-11693-8664-1352zhi/package.tgz",
+  "_where": "/mnt/data/tmp/apm-install-dir-11693-8664-nrha0p",
   "author": {
     "name": "Paul Nikolas Phoa"
   },
-  "main": "./lib/filecolor",
-  "version": "0.3.1",
+  "bugs": {
+    "url": "https://github.com/nikolas6/atom-filecolor/issues"
+  },
+  "dependencies": {},
   "description": "Add color to filename",
+  "devDependencies": {},
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "homepage": "https://github.com/nikolas6/atom-filecolor#readme",
   "keywords": [],
+  "license": "MIT",
+  "main": "./lib/filecolor",
+  "name": "filecolor",
+  "optionalDependencies": {},
+  "readme": "# filecolor package\n\nAdd color to filename.\n\n![A screenshot of your package](https://raw.githubusercontent.com/nikolas6/atom-filecolor/master/screenshot.png)\n",
+  "readmeFilename": "README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nikolas6/atom-filecolor.git"
   },
-  "license": "MIT",
-  "engines": {
-    "atom": ">=1.0.0 <2.0.0"
-  },
-  "dependencies": {},
-  "readme": "# filecolor package\n\nAdd color to filename.\n\n![A screenshot of your package](https://raw.githubusercontent.com/nikolas6/atom-filecolor/master/screenshot.png)\n",
-  "readmeFilename": "README.md",
-  "bugs": {
-    "url": "https://github.com/nikolas6/atom-filecolor/issues"
-  },
-  "homepage": "https://github.com/nikolas6/atom-filecolor#readme",
-  "_id": "filecolor@0.3.1",
-  "_shasum": "883a36cb86b84a1d5b61134db1a436b066be147d",
-  "_resolved": "file:../d-116325-20321-1nebugi/package.tgz",
-  "_from": "../d-116325-20321-1nebugi/package.tgz",
-  "_atomModuleCache": {
-    "version": 1,
-    "dependencies": [],
-    "extensions": {
-      ".coffee": [
-        "lib/filecolor-view.coffee",
-        "lib/filecolor.coffee"
-      ],
-      ".json": [
-        "package.json"
-      ]
-    },
-    "folders": []
-  }
+  "version": "0.4.0"
 }

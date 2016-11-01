@@ -1,5 +1,5 @@
-import {Observable, Scheduler} from "rxjs";
-import {CompositeDisposable} from "omnisharp-client";
+import {Observable} from "rxjs";
+import {CompositeDisposable} from "ts-disposables";
 import {Omni} from "../server/omni";
 import {exists} from "fs";
 import {ProjectViewModel} from "../server/project-view-model";
@@ -19,7 +19,6 @@ class ReloadWorkspace implements IFeature {
             .flatMap(solution => {
                 return Observable.from<ProjectViewModel<any>>(solution.model.projects)
                     .flatMap(x => x.sourceFiles)
-                    .observeOn(Scheduler.queue)
                     .concatMap(file => oexists(file).filter(x => !x)
                         .flatMap(() => solution.updatebuffer({ FileName: file, Buffer: "" })));
             });

@@ -1,4 +1,4 @@
-import {CompositeDisposable, Disposable, IDisposable} from "omnisharp-client";
+import {CompositeDisposable, Disposable, IDisposable} from "ts-disposables";
 import _ from "lodash";
 import {SolutionStatusCard} from "../views/solution-status-view";
 import {SolutionManager} from "../server/solution-manager";
@@ -9,6 +9,7 @@ class SolutionInformation implements IFeature {
     public selectedIndex: number = 0;
     private card: SolutionStatusCard;
     private cardDisposable: IDisposable;
+    private selectedDisposable: IDisposable;
     private container: Element;
 
     public activate() {
@@ -65,7 +66,18 @@ class SolutionInformation implements IFeature {
             this.selectedIndex = index;
 
         if (this.card) {
+            if (this.selectedDisposable) {
+                this.selectedDisposable.dispose();
+            }
             this.card.updateCard(SolutionManager.activeSolutions[this.selectedIndex].model, SolutionManager.activeSolutions.length);
+            this.selectedDisposable = Disposable.of(
+                SolutionManager.activeSolutions[this.selectedIndex].state
+                    .subscribe(() => {
+                        if (this.card) {
+                            this.card.updateCard(SolutionManager.activeSolutions[this.selectedIndex].model, SolutionManager.activeSolutions.length);
+                        }
+                    })
+            );
         }
     }
 

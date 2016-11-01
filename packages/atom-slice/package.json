@@ -1,0 +1,62 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "/mnt/data/tmp/d-11693-14622-jzhhmw/package.tgz",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "/mnt/data/tmp/d-11693-14622-jzhhmw/package.tgz",
+        "spec": "/mnt/data/tmp/d-11693-14622-jzhhmw/package.tgz",
+        "type": "local"
+      },
+      "/mnt/data/tmp/apm-install-dir-11693-14622-2brzfc"
+    ]
+  ],
+  "_from": "../d-11693-14622-jzhhmw/package.tgz",
+  "_id": "atom-slice@0.0.4",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/atom-slice",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "/mnt/data/tmp/d-11693-14622-jzhhmw/package.tgz",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "/mnt/data/tmp/d-11693-14622-jzhhmw/package.tgz",
+    "spec": "/mnt/data/tmp/d-11693-14622-jzhhmw/package.tgz",
+    "type": "local"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "file:../d-11693-14622-jzhhmw/package.tgz",
+  "_shasum": "055d2ae1f35b99c7f6b16fb57ae32a96b5036889",
+  "_shrinkwrap": null,
+  "_spec": "/mnt/data/tmp/d-11693-14622-jzhhmw/package.tgz",
+  "_where": "/mnt/data/tmp/apm-install-dir-11693-14622-2brzfc",
+  "bugs": {
+    "url": "https://github.com/AndiDog/atom-slice/issues"
+  },
+  "dependencies": {},
+  "description": "Syntax highlighting for Slice files as used with ZeroC Ice",
+  "devDependencies": {},
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "homepage": "https://github.com/AndiDog/atom-slice#readme",
+  "keywords": [
+    "syntax"
+  ],
+  "license": "MIT",
+  "name": "atom-slice",
+  "optionalDependencies": {},
+  "readme": "# Atom syntax package for ZeroC Ice's Slice language\n\n[![Build Status](https://travis-ci.org/AndiDog/atom-slice.svg?branch=master)](https://travis-ci.org/AndiDog/atom-slice)\n\nProvides syntax highlighting for the [Slice language](https://doc.zeroc.com/display/Ice36/The+Slice+Language) as used in ZeroC Ice.\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndiDog/atom-slice.git"
+  },
+  "version": "0.0.4"
+}

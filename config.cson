@@ -2,46 +2,65 @@
   "atom-beautify":
     general:
       _analyticsUserId: "019f9d48-7924-4bb0-aaea-26e23f3b3ec2"
+    js:
+      beautify_on_save: true
+      indent_size: 2
+      unescape_strings: true
+    json:
+      beautify_on_save: true
+      indent_size: 2
+      unescape_strings: true
   autosave:
     enabled: true
   core:
+    autoHideMenuBar: true
     disabledPackages: [
       "linter-liferay"
       "linter-jshint"
       "atom-bracket-highlight"
+      "activate-power-mode"
     ]
+    packagesWithKeymapsDisabled: [
+      "run-in-atom"
+    ]
+    telemetryConsent: "limited"
     themes: [
       "seti-ui"
       "seti-syntax"
     ]
   editor:
     backUpBeforeSaving: true
-    fontSize: 13
+    fontSize: 12
     invisibles: {}
     showIndentGuide: true
     showInvisibles: true
     softWrap: true
+  "emoji-syntax": {}
   "exception-reporting":
     userId: "7a697316-9921-f1d7-de82-6a644c2fb377"
   "git-diff": {}
-  linter: {}
+  linter:
+    errorPanelHeight: 47
   minimap:
-    absoluteMode: true
+    plugins:
+      "split-diff": true
+      "split-diffDecorationsZIndex": 0
   "omnisharp-atom":
     enhancedHighlighting: true
-  "run-in-atom":
-    openDeveloperToolsOnRun: false
+  "run-in-atom": {}
+  "seti-syntax":
+    themeColor: "Yellow"
+  "seti-ui":
+    compactView: true
+    themeColor: "Orange"
   welcome:
     showOnStartup: false
-".diff.source":
+".cisco-ios-config.source":
   editor:
-    tabLength: 4
+    tabLength: 1
 ".js.regexp.replacement.source":
   editor:
     tabLength: 4
 ".js.regexp.source":
-  editor:
-    tabLength: 4
-".js.source":
   editor:
     tabLength: 4

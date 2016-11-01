@@ -1,8 +1,61 @@
 {
-  "name": "split-diff",
-  "main": "./lib/split-diff",
-  "version": "0.7.5",
+  "_args": [
+    [
+      {
+        "raw": "/mnt/data/tmp/d-116919-13116-jow441/package.tgz",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "/mnt/data/tmp/d-116919-13116-jow441/package.tgz",
+        "spec": "/mnt/data/tmp/d-116919-13116-jow441/package.tgz",
+        "type": "local"
+      },
+      "/mnt/data/tmp/apm-install-dir-116919-13116-14zjpny"
+    ]
+  ],
+  "_from": "../d-116919-13116-jow441/package.tgz",
+  "_id": "split-diff@1.0.5",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/split-diff",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "/mnt/data/tmp/d-116919-13116-jow441/package.tgz",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "/mnt/data/tmp/d-116919-13116-jow441/package.tgz",
+    "spec": "/mnt/data/tmp/d-116919-13116-jow441/package.tgz",
+    "type": "local"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "file:../d-116919-13116-jow441/package.tgz",
+  "_shasum": "0e57e6f38dcc16586c88c89e0f61cb5654b1a7a6",
+  "_shrinkwrap": null,
+  "_spec": "/mnt/data/tmp/d-116919-13116-jow441/package.tgz",
+  "_where": "/mnt/data/tmp/apm-install-dir-116919-13116-14zjpny",
+  "activationCommands": {
+    "atom-workspace": [
+      "split-diff:toggle",
+      "split-diff:enable",
+      "split-diff:next-diff",
+      "split-diff:prev-diff"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/mupchrch/split-diff/issues"
+  },
+  "dependencies": {
+    "diff": "latest"
+  },
   "description": "A split pane diff tool.",
+  "devDependencies": {},
+  "engines": {
+    "atom": ">= 1.6.0 < 2.0.0"
+  },
+  "homepage": "https://github.com/mupchrch/split-diff#readme",
   "keywords": [
     "diff",
     "git",
@@ -15,80 +68,15 @@
     "difference",
     "visual"
   ],
-  "activationCommands": {
-    "atom-workspace": [
-      "split-diff:toggle",
-      "split-diff:enable"
-    ]
-  },
+  "license": "MIT",
+  "main": "./lib/split-diff",
+  "name": "split-diff",
+  "optionalDependencies": {},
+  "readme": "# split-diff package\n\nDiffs text between two split panes. New panes are created if less than two panes exist upon run of the package.\n\n\\*\\* **Supports diffing recent git changes!** \\*\\*\n\n![Split Diff in action](https://github.com/mupchrch/split-diff/raw/master/demo.gif)\n\n## Usage\n\n### Commands\n\n| Command | Effect | Default Keymaps |\n| ------- | ------ | --------------- |\n| `Toggle` | Toggles a diff of the text between two side-by-side panes. Creates panes as necessary. Displays git changes if there is a repository found. | ... |\n| `Ignore Whitespace` | Toggles the Ignore Whitespace setting. | ... |\n| `Move to Next Diff` | Highlights the next difference. Moves the cursor so it can be easily copied. | `ctrl-alt-n` |\n| `Move to Previous Diff` | Highlights the previous difference. Moves the cursor so it can be easily copied. | `ctrl-alt-p` |\n| `Copy to Right` | Copies all differences containing a cursor to the right pane. | ... |\n| `Copy to Left` | Copies all differences containing a cursor to the left pane. | ... |\n\nTo stop diffing, simply close one of the panes *or* use the `Toggle` command.\n\n### Settings\n\n* **Show Word Diff** - Diffs the words between each line when this box is checked.\n* **Ignore Whitespace** - Will not diff whitespace when this box is checked.\n* **Mute Notifications** - Mutes all warning notifications when this box is checked.\n* **Sync Scrolling** - Syncs the scrolling of the editors.\n* **Left Editor Color** - Specifies the highlight color for the left editor.\n* **Right Editor Color** - Specifies the highlight color for the right editor.\n\n## Minimap Plugin\n\nGet the [Split Diff minimap plugin](https://atom.io/packages/minimap-split-diff) to make it easier to spot differences!\n",
+  "readmeFilename": "README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mupchrch/split-diff.git"
   },
-  "license": "MIT",
-  "engines": {
-    "atom": ">= 1.6.0 < 2.0.0"
-  },
-  "dependencies": {
-    "diff": "latest"
-  },
-  "readme": "# split-diff package\n\nDiffs text between two split panes. New panes are created if less than two panes exist upon run of the package.\n\n\\*\\* **Supports diffing recent git changes!** \\*\\*\n\n![Split Diff in action](https://github.com/mupchrch/split-diff/raw/master/demo.gif)\n\n## Usage\n\n### Commands\n\n| Command | Effect | Default Keymaps |\n| ------- | ------ | --------------- |\n| `Toggle` | Toggles a diff of the text between two side-by-side panes. Creates panes as necessary. Displays git changes if there is a repository found. | ... |\n| `Ignore Whitespace` | Toggles the Ignore Whitespace setting. | ... |\n| `Move to Next Diff` | Scrolls to the next chunk of the diff and highlights it. | `ctrl-alt-n` |\n| `Move to Previous Diff` | Scrolls to the previous chunk of the diff and highlights it. | `ctrl-alt-p` |\n\nTo stop diffing, simply close one of the panes *or* use the `Toggle` command.\n\n### Settings\n\n* **Ignore Whitespace** - Will not diff whitespace when this box is checked.\n* **Show Word Diff** - Diffs the words between each line when this box is checked.\n* **Sync Horizontal Scroll** - Syncs the horizontal scrolling of the editors.\n* **Left Editor Color** - Specifies the highlight color for the left editor.\n* **Right Editor Color** - Specifies the highlight color for the right editor.\n\n## Minimap Plugin\n\nGet the [Split Diff minimap plugin](https://atom.io/packages/minimap-split-diff) to make it easier to spot differences!\n",
-  "readmeFilename": "README.md",
-  "bugs": {
-    "url": "https://github.com/mupchrch/split-diff/issues"
-  },
-  "homepage": "https://github.com/mupchrch/split-diff#readme",
-  "_id": "split-diff@0.7.5",
-  "_shasum": "7d0587fe9bf3b39163e123b5700be36c9c20bbd8",
-  "_resolved": "file:../d-116325-19024-tbuc2j/package.tgz",
-  "_from": "../d-116325-19024-tbuc2j/package.tgz",
-  "_atomModuleCache": {
-    "version": 1,
-    "dependencies": [
-      {
-        "name": "diff",
-        "version": "2.2.2",
-        "path": "node_modules/diff/lib/index.js"
-      }
-    ],
-    "extensions": {
-      ".js": [
-        "lib/build-lines.js",
-        "lib/compute-diff.js",
-        "lib/compute-word-diff.js",
-        "lib/sync-scroll.js",
-        "node_modules/diff/dist/diff.js",
-        "node_modules/diff/dist/diff.min.js",
-        "node_modules/diff/examples/node_example.js",
-        "node_modules/diff/lib/convert/dmp.js",
-        "node_modules/diff/lib/convert/xml.js",
-        "node_modules/diff/lib/diff/base.js",
-        "node_modules/diff/lib/diff/character.js",
-        "node_modules/diff/lib/diff/css.js",
-        "node_modules/diff/lib/diff/json.js",
-        "node_modules/diff/lib/diff/line.js",
-        "node_modules/diff/lib/diff/sentence.js",
-        "node_modules/diff/lib/diff/word.js",
-        "node_modules/diff/lib/index.js",
-        "node_modules/diff/lib/patch/apply.js",
-        "node_modules/diff/lib/patch/create.js",
-        "node_modules/diff/lib/patch/merge.js",
-        "node_modules/diff/lib/patch/parse.js",
-        "node_modules/diff/lib/util/array.js",
-        "node_modules/diff/lib/util/distance-iterator.js",
-        "node_modules/diff/lib/util/params.js",
-        "node_modules/diff/runtime.js"
-      ],
-      ".coffee": [
-        "lib/config-schema.coffee",
-        "lib/loading-view.coffee",
-        "lib/split-diff.coffee"
-      ],
-      ".json": [
-        "node_modules/diff/package.json",
-        "package.json"
-      ]
-    },
-    "folders": []
-  }
+  "version": "1.0.5"
 }

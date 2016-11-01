@@ -16,25 +16,48 @@ export interface AjaxRequest {
   password?: string;
   hasContent?: boolean;
   crossDomain?: boolean;
+  withCredentials?: boolean;
   createXHR?: () => XMLHttpRequest;
   progressSubscriber?: Subscriber<any>;
   resultSelector?: <T>(response: AjaxResponse) => T;
   responseType?: string;
 }
 
-function createXHRDefault(): XMLHttpRequest {
-  let xhr = new root.XMLHttpRequest();
-  if (this.crossDomain) {
+function getCORSRequest(): XMLHttpRequest {
+  if (root.XMLHttpRequest) {
+    const xhr = new root.XMLHttpRequest();
     if ('withCredentials' in xhr) {
-      xhr.withCredentials = true;
-      return xhr;
-    } else if (!!root.XDomainRequest) {
-      return new root.XDomainRequest();
-    } else {
-      throw new Error('CORS is not supported by your browser');
+      xhr.withCredentials = !!this.withCredentials;
     }
-  } else {
     return xhr;
+  } else if (!!root.XDomainRequest) {
+    return new root.XDomainRequest();
+  } else {
+    throw new Error('CORS is not supported by your browser');
+  }
+}
+
+function getXMLHttpRequest(): XMLHttpRequest {
+  if (root.XMLHttpRequest) {
+    return new root.XMLHttpRequest();
+  } else {
+    let progId: string;
+    try {
+      const progIds = ['Msxml2.XMLHTTP', 'Microsoft.XMLHTTP', 'Msxml2.XMLHTTP.4.0'];
+      for (let i = 0; i < 3; i++) {
+        try {
+          progId = progIds[i];
+          if (new root.ActiveXObject(progId)) {
+            break;
+          }
+        } catch (e) {
+          //suppress exceptions
+        }
+      }
+      return new root.ActiveXObject(progId);
+    } catch (e) {
+      throw new Error('XMLHttpRequest is not supported by your browser');
+    }
   }
 }
 
@@ -84,7 +107,7 @@ export class AjaxObservable<T> extends Observable<T> {
    *
    * @example
    * source = Rx.Observable.ajax('/products');
-   * source = Rx.Observable.ajax( url: 'products', method: 'GET' });
+   * source = Rx.Observable.ajax({ url: 'products', method: 'GET' });
    *
    * @param {string|Object} request Can be one of the following:
    *   A string of the URL to make the Ajax call.
@@ -104,8 +127,6 @@ export class AjaxObservable<T> extends Observable<T> {
    * @name ajax
    * @owner Observable
   */
-  static _create_stub(): void { return null; }
-
   static create: AjaxCreationMethod = (() => {
     const create: any = (urlOrRequest: string | AjaxRequest) => {
       return new AjaxObservable(urlOrRequest);
@@ -127,8 +148,11 @@ export class AjaxObservable<T> extends Observable<T> {
 
     const request: AjaxRequest = {
       async: true,
-      createXHR: createXHRDefault,
+      createXHR: function() {
+        return this.crossDomain ? getCORSRequest.call(this) : getXMLHttpRequest();
+      },
       crossDomain: false,
+      withCredentials: false,
       headers: {},
       method: 'GET',
       responseType: 'json',
@@ -174,7 +198,7 @@ export class AjaxSubscriber<T> extends Subscriber<Event> {
     }
 
     // ensure content type is set
-    if (!('Content-Type' in headers)) {
+    if (!('Content-Type' in headers) && !(root.FormData && request.body instanceof root.FormData)) {
       headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
     }
 
@@ -247,16 +271,18 @@ export class AjaxSubscriber<T> extends Subscriber<Event> {
     }
   }
 
-  private serializeBody(body: any, contentType: string) {
+  private serializeBody(body: any, contentType?: string) {
     if (!body || typeof body === 'string') {
       return body;
     } else if (root.FormData && body instanceof root.FormData) {
       return body;
     }
 
-    const splitIndex = contentType.indexOf(';');
-    if (splitIndex !== -1) {
-      contentType = contentType.substring(0, splitIndex);
+    if (contentType) {
+      const splitIndex = contentType.indexOf(';');
+      if (splitIndex !== -1) {
+        contentType = contentType.substring(0, splitIndex);
+      }
     }
 
     switch (contentType) {
@@ -264,6 +290,8 @@ export class AjaxSubscriber<T> extends Subscriber<Event> {
         return Object.keys(body).map(key => `${encodeURI(key)}=${encodeURI(body[key])}`).join('&');
       case 'application/json':
         return JSON.stringify(body);
+      default:
+        return body;
     }
   }
 

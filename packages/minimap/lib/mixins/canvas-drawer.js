@@ -414,14 +414,22 @@ export default class CanvasDrawer extends Mixin {
     const editor = this.getTextEditor()
     let tokenLines = []
     if (typeof editor.tokenizedLinesForScreenRows === 'function') {
-      for (let tokenizedLine of editor.tokenizedLinesForScreenRows(startRow, endRow)) {
-        const invisibleRegExp = this.getInvisibleRegExpForLine(tokenizedLine)
-        tokenLines.push(tokenizedLine.tokens.map((token) => {
+      const tokenizedLines = editor.tokenizedLinesForScreenRows(startRow, endRow)
+      for (let tokenizedLine of tokenizedLines) {
+        if (tokenizedLine) {
+          const invisibleRegExp = this.getInvisibleRegExpForLine(tokenizedLine)
+          tokenLines.push(tokenizedLine.tokens.map((token) => {
+            return {
+              value: token.value.replace(invisibleRegExp, ' '),
+              scopes: token.scopes.slice()
+            }
+          }))
+        } else {
           return {
-            value: token.value.replace(invisibleRegExp, ' '),
-            scopes: token.scopes.slice()
+            value: '',
+            scopes: []
           }
-        }))
+        }
       }
     } else {
       const displayLayer = editor.displayLayer
@@ -431,16 +439,18 @@ export default class CanvasDrawer extends Mixin {
         let tokens = []
         let scopes = []
         let textIndex = 0
+        // console.log(lineText, invisibleRegExp, lineText.replace(invisibleRegExp, ' '))
         for (let tagCode of tagCodes) {
           if (displayLayer.isOpenTagCode(tagCode)) {
             scopes.push(displayLayer.tagForCode(tagCode))
           } else if (displayLayer.isCloseTagCode(tagCode)) {
             scopes.pop()
           } else {
-            tokens.push({
-              value: lineText.substr(textIndex, tagCode).replace(invisibleRegExp, ' '),
-              scopes: scopes.slice()
-            })
+            let value = lineText.substr(textIndex, tagCode)
+            if (invisibleRegExp) {
+              value = value.replace(invisibleRegExp, ' ')
+            }
+            tokens.push({ value: value, scopes: scopes.slice() })
             textIndex += tagCode
           }
         }
@@ -474,11 +484,21 @@ export default class CanvasDrawer extends Mixin {
     const context = this.tokensLayer.context
     const {width: canvasWidth} = this.tokensLayer.getSize()
 
+    if (typeof this.tokenLinesForScreenRows !== 'function') {
+      console.error(`tokenLinesForScreenRows should be a function but it was ${typeof this.tokenLinesForScreenRows}`, this.tokenLinesForScreenRows)
+
+      return
+    }
+
+    const screenRowsTokens = this.tokenLinesForScreenRows(firstRow, lastRow)
+
     let y = offsetRow * lineHeight
-    for (let tokens of this.tokenLinesForScreenRows(firstRow, lastRow)) {
+    for (let i = 0; i < screenRowsTokens.length; i++) {
+      let tokens = screenRowsTokens[i]
       let x = 0
       context.clearRect(x, y, canvasWidth, lineHeight)
-      for (let token of tokens) {
+      for (let j = 0; j < tokens.length; j++) {
+        let token = tokens[j]
         if (/^\s+$/.test(token.value)) {
           x += token.value.length * charWidth
         } else {
@@ -503,13 +523,15 @@ export default class CanvasDrawer extends Mixin {
    */
   getInvisibleRegExp () {
     let invisibles = this.getTextEditor().getInvisibles()
-    let regexp = ''
-    if (invisibles.cr != null) { regexp += invisibles.cr + '|' }
-    if (invisibles.eol != null) { regexp += invisibles.eol + '|' }
-    if (invisibles.space != null) { regexp += invisibles.space + '|' }
-    if (invisibles.tab != null) { regexp += invisibles.tab + '|' }
+    let regexp = []
+    if (invisibles.cr != null) { regexp.push(invisibles.cr) }
+    if (invisibles.eol != null) { regexp.push(invisibles.eol) }
+    if (invisibles.space != null) { regexp.push(invisibles.space) }
+    if (invisibles.tab != null) { regexp.push(invisibles.tab) }
 
-    return new RegExp(_.escapeRegExp(regexp.slice(0, -1)), 'g')
+    return regexp.length === 0 ? null : RegExp(regexp.filter((s) => {
+      return typeof s === 'string'
+    }).map(_.escapeRegExp).join('|'), 'g')
   }
 
   /**

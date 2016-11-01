@@ -1,8 +1,8 @@
 import _ from "lodash";
 import {Observable, AsyncSubject} from "rxjs";
-import {CompositeDisposable, Disposable, IDisposable} from "omnisharp-client";
-import * as path from "path";
-import * as fs from "fs";
+import {CompositeDisposable, Disposable, IDisposable} from "ts-disposables";
+import path from "path";
+import fs from "fs";
 
 // TODO: Remove these at some point to stream line startup.
 import {Omni} from "./server/omni";
@@ -72,14 +72,16 @@ class OmniSharpAtom {
                 // Only activate features once we have a solution!
                 this.disposable.add(startingObservable
                     .flatMap(() => this.loadFeatures(this.getFeatures("features")))
-                    .subscribe({ complete: () => {
-                        this.disposable.add(atom.workspace.observeTextEditors((editor: Atom.TextEditor) => {
-                            this.detectAutoToggleGrammar(editor);
-                        }));
+                    .subscribe({
+                        complete: () => {
+                            this.disposable.add(atom.workspace.observeTextEditors((editor: Atom.TextEditor) => {
+                                this.detectAutoToggleGrammar(editor);
+                            }));
 
-                        this._activated.next(true);
-                        this._activated.complete();
-                    } }));
+                            this._activated.next(true);
+                            this._activated.complete();
+                        }
+                    }));
 
             });
     }
@@ -91,8 +93,7 @@ class OmniSharpAtom {
 
         console.info(`Getting features for "${folder}"...`);
 
-        const packageDir = Omni.packageDir;
-        const featureDir = `${packageDir}/omnisharp-atom/lib/${folder}`;
+        const featureDir = `${__dirname}/${folder}`;
 
         function loadFeature(file: string) {
             const result = require(`./${folder}/${file}`);
@@ -112,7 +113,7 @@ class OmniSharpAtom {
 
                     const features: { key: string, activate: () => () => void }[] = [];
                     _.each(feature, (value: IFeature, key: string) => {
-                        if (!_.isFunction(value)) {
+                        if (!_.isFunction(value) && !_.isArray(value)) {
                             if (!value.required) {
                                 this.config[key] = {
                                     title: `${value.title}`,
@@ -154,12 +155,14 @@ class OmniSharpAtom {
             .map(f => f.activate())
             .filter(x => !!x)
             .toArray()
-            .do({ complete: () => {
-                (<any>atom.config).setSchema("omnisharp-atom", {
-                    type: "object",
-                    properties: this.config
-                });
-            }})
+            .do({
+                complete: () => {
+                    (<any>atom.config).setSchema("omnisharp-atom", {
+                        type: "object",
+                        properties: this.config
+                    });
+                }
+            })
             .concatMap(x => x)
             .do(x => x());
     }
@@ -284,9 +287,10 @@ class OmniSharpAtom {
         return require("./services/completion-provider");
     }
 
-    public provideLinter() {
-        const LinterProvider = require("./services/linter-provider");
-        return LinterProvider.provider;
+    public provideLinter(): any[] {
+        return [];
+        //const LinterProvider = require("./services/linter-provider");
+        //return LinterProvider.provider;
     }
 
     public provideProjectJson() {
@@ -304,6 +308,10 @@ class OmniSharpAtom {
         }));
 
         this.disposable.add(LinterProvider.init(linter));
+    }
+
+    public consumeIndieLinter(linter: any) {
+        require("./services/linter-provider").registerIndie(linter, this.disposable);
     }
     /* tslint:enable:variable-name */
 

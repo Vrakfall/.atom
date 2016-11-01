@@ -100,30 +100,23 @@ module.exports = class DiffViewEditor {
     var count = 0;
 
     for (var i=0; i<wordDiff.length; i++) {
-      // if there was a change
-      // AND one of these is true:
-      // if the string is not spaces, highlight
-      // OR
-      // if the string is spaces and whitespace not ignored, highlight
-      if (wordDiff[i].changed
-        && (/\S/.test(wordDiff[i].value)
-        || (!/\S/.test(wordDiff[i].value) && !isWhitespaceIgnored))) {
-        var marker = this._editor.markBufferRange([[lineNumber, count], [lineNumber, (count + wordDiff[i].value.length)]], {invalidate: 'never', persistent: false, class: klass})
+      if (wordDiff[i].value) { // fix for #49
+        // if there was a change
+        // AND one of these is true:
+        // if the string is not spaces, highlight
+        // OR
+        // if the string is spaces and whitespace not ignored, highlight
+        if (wordDiff[i].changed
+          && (/\S/.test(wordDiff[i].value)
+          || (!/\S/.test(wordDiff[i].value) && !isWhitespaceIgnored))) {
+          var marker = this._editor.markBufferRange([[lineNumber, count], [lineNumber, (count + wordDiff[i].value.length)]], {invalidate: 'never', persistent: false, class: klass})
 
-        this._editor.decorateMarker(marker, {type: 'highlight', class: klass});
-        this._markers.push(marker);
+          this._editor.decorateMarker(marker, {type: 'highlight', class: klass});
+          this._markers.push(marker);
+        }
+        count += wordDiff[i].value.length;
       }
-      count += wordDiff[i].value.length;
     }
-  }
-
-  /**
-   * Scrolls the editor to a line.
-   *
-   * @param lineNumber The line number to scroll to.
-   */
-  scrollToLine(lineNumber: number): void {
-    this._editor.scrollToBufferPosition([lineNumber, 0]);
   }
 
   /**
@@ -146,7 +139,11 @@ module.exports = class DiffViewEditor {
    * @param endLine The line number that the selection ends at (non-inclusive).
    */
   selectLines(startLine: number, endLine: number): void {
-    this._currentSelection = this._createLineMarker(startLine, endLine, 'split-diff-selected');
+    // don't want to highlight if they are the same (same numbers means chunk is
+    // just pointing to a location to copy-to-right/copy-to-left)
+    if (startLine < endLine) {
+      this._currentSelection = this._createLineMarker(startLine, endLine, 'split-diff-selected');
+    }
   }
 
   /**
@@ -171,20 +168,56 @@ module.exports = class DiffViewEditor {
   }
 
   /**
-   * Get the text for the line.
-   *
-   * @param lineNumber The line number to get the text from.
-   * @return The text from the specified line.
+   * Removes the text editor without prompting a save.
    */
-  getLineText(lineNumber : number): string {
-    return this._editor.lineTextForBufferRow(lineNumber);
+  cleanUp(): void {
+    // if the pane that this editor was in is now empty, we will destroy it
+    var editorPane = atom.workspace.paneForItem(this._editor);
+    if (typeof editorPane !== 'undefined' && editorPane != null && editorPane.getItems().length == 1) {
+      editorPane.destroy();
+    } else {
+      this._editor.setText('');
+      this._editor.destroy();
+    }
   }
 
   /**
+   * Finds cursor-touched line ranges that are marked as different in an editor
+   * view.
    *
+   * @return The line ranges of diffs that are touched by a cursor.
    */
-  cleanUp(): void {
-    this._editor.setText('');
-    this._editor.destroy();
+  getCursorDiffLines(): boolean {
+    var cursorPositions = this._editor.getCursorBufferPositions();
+    var touchedLines = [];
+
+    for (var i=0; i<cursorPositions.length; i++) {
+      for (var j=0; j<this._markers.length; j++) {
+        var markerRange = this._markers[j].getBufferRange();
+
+        if (cursorPositions[i].row >= markerRange.start.row
+          && cursorPositions[i].row < markerRange.end.row) {
+            touchedLines.push(markerRange);
+            break;
+        }
+      }
+    }
+
+    // put the chunks in order so the copy function doesn't mess up
+    touchedLines.sort(function(lineA, lineB) {
+      return lineA.start.row - lineB.start.row;
+    });
+
+    return touchedLines;
+  }
+
+  /**
+   * Used to get the Text Editor object for this view. Helpful for calling basic
+   * Atom Text Editor functions.
+   *
+   * @return The Text Editor object for this view.
+   */
+  getEditor(): TextEditor {
+    return this._editor;
   }
 };

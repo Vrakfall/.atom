@@ -4,8 +4,69 @@
 import url from 'url'
 import shell from 'shell'
 import path from 'path'
+import fs from 'fs'
 import { sync as resolve } from 'resolve'
 import { Range } from 'atom'
+
+function findPackageJson(basedir) {
+    const packagePath = path.resolve(basedir, 'package.json')
+    try {
+        fs.accessSync(packagePath)
+    } catch (e) {
+        const parent = path.resolve(basedir, '../')
+        if (parent != basedir) {
+            return findPackageJson(parent)
+        }
+        return undefined
+    }
+    return packagePath
+}
+
+function loadModuleRoots(basedir) {
+    const packagePath = findPackageJson(basedir)
+    if (!packagePath) {
+        return
+    }
+    const config = JSON.parse(fs.readFileSync(packagePath))
+
+    if (config && config.moduleRoots) {
+        let roots = config.moduleRoots
+        if (typeof roots === 'string') {
+            roots = [ roots ]
+        }
+
+        const packageDir = path.dirname(packagePath)
+        return roots.map(
+            r => path.resolve(packageDir , r)
+        )
+    }
+}
+
+function resolveWithCustomRoots(basedir, absoluteModule) {
+    const module = `./${absoluteModule}`
+
+    const roots = loadModuleRoots(basedir)
+
+    if (roots) {
+        // Atom doesn't support custom roots, but I need something I can use
+        // to verify the feature works.
+        if (false) { require('make-cache') } // eslint-disable-line
+
+        const options = {
+            basedir,
+            extensions: atom.config.get('js-hyperclick.extensions'),
+        }
+        for (let i = 0; i < roots.length; i++) {
+            options.basedir = roots[i]
+
+            try {
+                return resolve(module, options)
+            } catch (e) {
+                /* do nothing */
+            }
+        }
+    }
+}
 
 function resolveModule(textEditor, module) {
     const basedir = path.dirname(textEditor.getPath())
@@ -31,6 +92,8 @@ function resolveModule(textEditor, module) {
         }
 
         return path.join(basedir, module)
+    } else {
+        return resolveWithCustomRoots(basedir, module)
     }
 }
 
@@ -56,9 +119,6 @@ function findClosestScope(scopes, start, end) {
         return closest
     })
 }
-
-const find = (ar, cb) => ar.filter(cb)[0]
-
 
 function moduleResult({module, imported}, textEditor, range, cache) {
     return {
@@ -88,8 +148,14 @@ function moduleResult({module, imported}, textEditor, range, cache) {
                 return
             }
 
-            atom.workspace.open(filename).then((editor) => {
-                const { exports } = cache.get(editor)
+            const options = {
+                pending: atom.config.get('js-hyperclick.usePendingPanes')
+            }
+
+            atom.workspace.open(filename, options).then((editor) => {
+                const { parseError, exports } = cache.get(editor)
+                if (parseError) return
+
                 let target = exports[imported]
                 if (target == null) {
                     target = exports.default
@@ -120,9 +186,25 @@ function pathResult(path, textEditor, cache) {
     return moduleResult(module, textEditor, range, cache)
 }
 
-const maybeIdentifier = /^[$0-9\w]+$/
 export default function(textEditor, text, range, cache) {
-    const { paths, scopes, externalModules } = cache.get(textEditor)
+    if (text.length === 0) {
+        return null
+    }
+    const { parseError, paths, scopes, externalModules } = cache.get(textEditor)
+    if (parseError) {
+        return {
+            range,
+            callback() {
+                const [ projectPath, relativePath ] = atom.project.relativizePath(textEditor.getPath())
+                void(projectPath)
+
+                atom.notifications.addError(`js-hyperclick: error parsing ${relativePath}`, {
+                    detail: parseError.message
+                })
+            }
+        }
+    }
+
     const start = textEditor.buffer.characterIndexForPosition(range.start)
     const end = textEditor.buffer.characterIndexForPosition(range.end)
 
@@ -134,12 +216,6 @@ export default function(textEditor, text, range, cache) {
         }
     }
 
-    // Avoid wasting time on symbols
-    if (!text.match(maybeIdentifier)) {
-        return null
-    }
-
-
     const closestScope = findClosestScope(scopes, start, end)
 
     // Sometimes it reports it has a binding, but it can't actually get the
@@ -149,17 +225,22 @@ export default function(textEditor, text, range, cache) {
         const binding = closestScope.getBinding(text)
         const { line, column } =  binding.identifier.loc.start
 
-        const module = find(externalModules, (m) => {
-            const { start: bindingStart } = binding.identifier
-            return m.local == text && m.start == bindingStart
-        })
+        const clickedDeclaration = (line - 1 == range.start.row && column == range.start.column)
+        const crossFiles = !atom.config.get('js-hyperclick.jumpToImport')
 
-        if (module) {
-            return moduleResult(module, textEditor, range, cache)
+        if (clickedDeclaration || crossFiles) {
+            const module = externalModules.find((m) => {
+                const { start: bindingStart } = binding.identifier
+                return m.local == text && m.start == bindingStart
+            })
+
+            if (module) {
+                return moduleResult(module, textEditor, range, cache)
+            }
         }
 
         // Exit early if you clicked on where the variable is declared
-        if (line - 1 == range.start.row && column == range.start.column) {
+        if (clickedDeclaration) {
             return null
         }
 

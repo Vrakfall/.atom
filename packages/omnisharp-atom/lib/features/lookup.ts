@@ -2,13 +2,12 @@
 // and https://atom.io/packages/ide-flow
 // https://atom.io/packages/atom-typescript
 import {Models} from "omnisharp-client";
-import {Observable, Scheduler, Subscription} from "rxjs";
-import {CompositeDisposable, Disposable, IDisposable} from "omnisharp-client";
+import {Observable, Subscription} from "rxjs";
+import {CompositeDisposable, Disposable, IDisposable} from "ts-disposables";
 import {Omni} from "../server/omni";
 import {TooltipView} from "../views/tooltip-view";
 const $: JQueryStatic = require("jquery");
 const escape = require("escape-html");
-import {bufferFor} from "../operators/bufferFor";
 
 class TypeLookup implements IFeature {
     private disposable: CompositeDisposable;
@@ -64,20 +63,19 @@ class Tooltip implements IDisposable {
         const mouseout = Observable.fromEvent<MouseEvent>(scroll[0], "mouseout");
         this.keydown = Observable.fromEvent<KeyboardEvent>(scroll[0], "keydown");
 
-        cd.add(bufferFor(mousemove.observeOn(Scheduler.queue), 400)
-            .map(events => {
-                for (const event of events.reverse()) {
-                    const pixelPt = this.pixelPositionFromMouseEvent(editorView, event);
-                    if (!pixelPt)
-                        continue;
-                    const screenPt = editor.screenPositionForPixelPosition(pixelPt);
-                    const bufferPt = editor.bufferPositionForScreenPosition(screenPt);
-                    if (lastExprTypeBufferPt && lastExprTypeBufferPt.isEqual(bufferPt) && this.exprTypeTooltip)
-                        continue;
+        cd.add(mousemove
+            .auditTime(200)
+            .map(event => {
+                const pixelPt = this.pixelPositionFromMouseEvent(editorView, event);
+                if (!pixelPt)
+                    return;
+                const screenPt = editor.screenPositionForPixelPosition(pixelPt);
+                const bufferPt = editor.bufferPositionForScreenPosition(screenPt);
+                if (lastExprTypeBufferPt && lastExprTypeBufferPt.isEqual(bufferPt) && this.exprTypeTooltip)
+                    return;
 
-                    lastExprTypeBufferPt = bufferPt;
-                    return { bufferPt, event };
-                }
+                lastExprTypeBufferPt = bufferPt;
+                return { bufferPt, event };
             })
             .filter(z => !!z)
             .do(() => this.hideExpressionType())

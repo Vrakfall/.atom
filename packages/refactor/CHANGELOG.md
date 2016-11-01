@@ -1,3 +1,28 @@
+## v0.9.2 on 2016-06-30
+
+* Add keymap example to README, and fix link to keymap.cson
+* Use original debug package to solve install failures
+* Support different styles for references/mutations/declaration
+
+## v0.8.0
+* Correct refactor of shorthands
+
+## v0.6.1 on 2016-06-22
+* Fix issues of #10 reference markers leak
+
+## v0.6.0 on 2015-09-08
+
+* Improve error handling
+* Only update references/errors when needed, increase performance
+* Use onDidStopChanging and increase delay of cursor move, increase performance
+* Fix styles for shadow dom
+* Use a config schema to fix #3
+
+## v0.5.0, v0.5.1 on 2015-06-16
+
+* Republished and maintained by [hax](https://github.com/hax)
+* Fix issues of using deprecated api
+
 ## v0.4.1 on 2014/08/16
 
 * Replace deprecated method. #10

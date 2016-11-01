@@ -1,31 +1,30 @@
+{ CompositeDisposable } = require 'atom'
 { EventEmitter2 } = require 'eventemitter2'
-d = (require 'debug') 'watcher'
+d = (require 'debug/browser') 'refactor:watcher'
 
 module.exports =
 class Watcher extends EventEmitter2
 
   constructor: (@moduleManager, @editor) ->
     super()
-    #@editor.on 'grammar-changed', @verifyGrammar
-
-    @editor.onDidDestroy @onDestroyed
-    @editor.onDidStopChanging @onBufferChanged
-    @editor.onDidChangeCursorPosition @onCursorMoved
-
+    @disposables = new CompositeDisposable
+    @disposables.add @editor.onDidDestroy @onDestroyed
+    @disposables.add @editor.onDidStopChanging @onBufferChanged
+    @disposables.add @editor.onDidChangeCursorPosition @onCursorMoved
+    @disposables.add @moduleManager.onActivated @verifyGrammar
     @verifyGrammar()
-    @moduleManager.on 'changed', @verifyGrammar
 
-  destruct: =>
+  dispose: =>
     @removeAllListeners()
     @deactivate()
-    #@editor.off 'grammar-changed', @verifyGrammar
-    @moduleManager.off 'changed', @verifyGrammar
 
+    @disposables.dispose()
     delete @moduleManager
     delete @editor
     delete @module
 
   onDestroyed: =>
+    d 'onDestroyed'
     return unless @eventDestroyed
     @emit 'destroyed', @
 
@@ -61,6 +60,7 @@ class Watcher extends EventEmitter2
     @parse()
 
   deactivate: ->
+    d 'deactivate'
     # Stop listening
     @cursorMoved = false
 
@@ -100,11 +100,16 @@ class Watcher extends EventEmitter2
       @destroyErrors()
       @cachedText = text
       @ripper.parse text, @onParseEnd
-    else
-      @onParseEnd()
     @eventCursorMoved = on
 
+  update: (changes) =>
+    return if changes.length is 0
+    if typeof @ripper.update isnt 'function'
+      @parse()
+    else @ripper.update change for change in changes
+
   onParseEnd: (errors) =>
+    d 'onParseEnd'
     if errors?
       @createErrors errors
     else
@@ -128,17 +133,23 @@ class Watcher extends EventEmitter2
       marker
 
   destroyReferences: ->
+    d 'destroyReferences'
     return unless @referenceMarkers?
     for marker in @referenceMarkers
       marker.destroy()
     delete @referenceMarkers
 
   createReferences: ->
+    d 'createReferences'
     ranges = @ripper.find @editor.getSelectedBufferRange().start
     return unless ranges? and ranges.length > 0
     @referenceMarkers = for range in ranges
       marker = @editor.markBufferRange range
-      @editor.decorateMarker marker, type: 'highlight', class: 'refactor-reference'
+      cls =
+        if range.type
+          'refactor-' + range.type
+        else 'refactor-reference'
+      @editor.decorateMarker marker, type: 'highlight', class: cls
       marker
 
 
@@ -172,10 +183,27 @@ class Watcher extends EventEmitter2
     # Register the markers of the references' ranges.
     # Highlight these markers.
     @renamingMarkers = for range in ranges
-      @editor.addSelectionForBufferRange range
       marker = @editor.markBufferRange range
+      marker.shorthand = range.shorthand
+      marker.delimiter = range.delimiter
+      marker.key = @editor.markBufferRange range.key if range.key
       @editor.decorateMarker marker, type: 'highlight', class: 'refactor-reference'
       marker
+
+    for marker in @renamingMarkers
+      if marker.shorthand
+        range = marker.getBufferRange()
+        origin = @editor.markBufferRange range, invalidate: 'inside'
+        text = @editor.getTextInBufferRange range
+        start = range.start
+        @editor.setTextInBufferRange [start, start], marker.delimiter, undo: 'skip'
+        key = @editor.setTextInBufferRange [start, start], text
+        marker.key = @editor.markBufferRange key
+        marker.setBufferRange origin.getBufferRange()
+
+    for marker in @renamingMarkers
+      @editor.addSelectionForBufferRange marker.getBufferRange()
+
     # Start renaming life cycle.
     @eventCursorMoved = off
     @eventCursorMoved = 'abort'
@@ -183,9 +211,15 @@ class Watcher extends EventEmitter2
     # Returns true not to abort keyboard binding.
     true
 
-  abort: =>
+  abort: (event) =>
     # When this editor isn't active, do nothing.
     return unless @isActive() and @renamingCursor? and @renamingMarkers?
+
+    d 'move cursor from', event.oldBufferPosition, 'to', event.newBufferPosition
+    for marker in @renamingMarkers
+      return if marker.getBufferRange().containsPoint event.newBufferPosition
+    @done()
+    return
 
     # Verify all cursors are in renaming markers.
     # When the cursor is out of marker at least one, abort renaming.
@@ -203,6 +237,7 @@ class Watcher extends EventEmitter2
     @done()
 
   done: ->
+    d 'done'
     # When this editor isn't active, returns false for aborting keyboard binding.
     return false unless @isActive() and @renamingCursor? and @renamingMarkers?
 
@@ -214,6 +249,11 @@ class Watcher extends EventEmitter2
     delete @renamingCursor
     # Remove all markers for renaming.
     for marker in @renamingMarkers
+      if marker.key
+        key = @editor.getTextInBufferRange marker.key.getBufferRange()
+        value = @editor.getTextInBufferRange marker.getBufferRange()
+        if key == value
+          @editor.setTextInBufferRange [marker.key.getStartBufferPosition(), marker.getStartBufferPosition()], ''
       marker.destroy()
     delete @renamingMarkers
 
@@ -231,15 +271,15 @@ class Watcher extends EventEmitter2
   User events
   ###
 
-  onBufferChanged: =>
+  onBufferChanged: (event) =>
     return unless @eventBufferChanged
-    d 'buffer changed'
-    @parse()
+    d 'buffer changed', event
+    @update(event.changes)
 
-  onCursorMoved: =>
+  onCursorMoved: (event) =>
     return unless @eventCursorMoved
     if @eventCursorMoved == 'abort'
-      @abort()
+      @abort event
     else
       clearTimeout @cursorMovedTimeoutId
       @cursorMovedTimeoutId = setTimeout @onCursorMovedAfter, 100

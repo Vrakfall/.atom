@@ -4,11 +4,9 @@ import {Omni} from "../server/omni";
 const Range = require("atom").Range;
 /* tslint:enable:variable-name */
 import _ from "lodash";
-import {Observable} from "rxjs";
-import {CompositeDisposable} from "omnisharp-client";
-import {codeCheck} from "../features/code-check";
+import {CompositeDisposable} from "ts-disposables";
 
-interface LinterError {
+interface LinterMessage {
     type: string; // "error" | "warning"
     text?: string;
     html?: string;
@@ -17,28 +15,40 @@ interface LinterError {
     [key: string]: any;
 }
 
-function mapValues(editor: Atom.TextEditor, error: Models.DiagnosticLocation): LinterError {
+interface IndieRegistry {
+    register(options: { name: string; }): Indie;
+    has(indie: any): Boolean;
+    unregister(indie: any): void;
+}
+
+interface Indie {
+    setMessages(messages: LinterMessage[]): void;
+    deleteMessages(): void;
+    dispose(): void;
+}
+
+function mapIndieValues(error: Models.DiagnosticLocation): LinterMessage {
     const level = error.LogLevel.toLowerCase();
 
     return {
         type: level,
         text: `${error.Text} [${Omni.getFrameworks(error.Projects)}] `,
-        filePath: editor.getPath(),
+        filePath: error.FileName,
         range: new Range([error.Line, error.Column], [error.EndLine, error.EndColumn])
     };
 }
 
 function showLinter() {
-    _.each(document.querySelectorAll("linter-bottom-tab"), (element: HTMLElement) => element.style.display = "");
-    _.each(document.querySelectorAll("linter-bottom-status"), (element: HTMLElement) => element.style.display = "");
+    _.each(document.querySelectorAll("linter-bottom-tab"), (element: HTMLElement) => { element.style.display = ""; });
+    _.each(document.querySelectorAll("linter-bottom-status"), (element: HTMLElement) => { element.style.display = ""; });
     const panel = <HTMLElement>document.querySelector("linter-panel");
     if (panel)
         panel.style.display = "";
 }
 
 function hideLinter() {
-    _.each(document.querySelectorAll("linter-bottom-tab"), (element: HTMLElement) => element.style.display = "none");
-    _.each(document.querySelectorAll("linter-bottom-status"), (element: HTMLElement) => element.style.display = "none");
+    _.each(document.querySelectorAll("linter-bottom-tab"), (element: HTMLElement) => {element.style.display = "none";});
+    _.each(document.querySelectorAll("linter-bottom-status"), (element: HTMLElement) => {element.style.display = "none";});
     const panel = <HTMLElement>document.querySelector("linter-panel");
     if (panel)
         panel.style.display = "none";
@@ -96,35 +106,21 @@ export function init(linter: { getEditorLinter: (editor: Atom.TextEditor) => { l
     return disposable;
 }
 
-export const provider = [
-    {
-        name: "c#",
-        get grammarScopes() { return Omni.grammars.map((x: any) => x.scopeName); },
-        scope: "file",
-        lintOnFly: true,
-        lint: (editor: Atom.TextEditor) => {
-            const path = editor.getPath();
-            const o = Observable.defer(() => codeCheck.doCodeCheck(editor));
-            return o
-                .timeoutWith(30000, Observable.of(<Models.DiagnosticLocation[]>[]))
-                .flatMap(x => x)
-                .filter(z => z.FileName === path && (showHiddenDiagnostics || z.LogLevel !== "Hidden"))
-                .map(error => mapValues(editor, error))
-                .toArray()
-                .toPromise();
-        }
-    }, {
-        name: "c#",
-        get grammarScopes() { return Omni.grammars.map((x: any) => x.scopeName); },
-        scope: "project",
-        lintOnFly: false,
-        lint: (editor: Atom.TextEditor) => {
-            return Omni.activeModel
-                .flatMap(x => x.diagnostics)
-                .filter(z => showHiddenDiagnostics || z.LogLevel !== "Hidden")
-                .map(error => mapValues(editor, error))
-                .toArray()
-                .toPromise();
-        }
-    }
-];
+export function registerIndie(registry: IndieRegistry, disposable: CompositeDisposable) {
+    const linter = registry.register({ name: "c#" });
+    disposable.add(
+        linter,
+        Omni.diagnostics
+            .subscribe(diagnostics => {
+                const messages: LinterMessage[] = [];
+                for (let item of diagnostics) {
+                    if (showHiddenDiagnostics || item.LogLevel !== "Hidden") {
+                        messages.push(mapIndieValues(item));
+                    }
+                }
+
+                linter.setMessages(messages);
+            })
+    );
+}
+

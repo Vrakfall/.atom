@@ -9,22 +9,44 @@ var tryCatch_1 = require('../../util/tryCatch');
 var errorObject_1 = require('../../util/errorObject');
 var Observable_1 = require('../../Observable');
 var Subscriber_1 = require('../../Subscriber');
-function createXHRDefault() {
-    var xhr = new root_1.root.XMLHttpRequest();
-    if (this.crossDomain) {
+function getCORSRequest() {
+    if (root_1.root.XMLHttpRequest) {
+        var xhr = new root_1.root.XMLHttpRequest();
         if ('withCredentials' in xhr) {
-            xhr.withCredentials = true;
-            return xhr;
+            xhr.withCredentials = !!this.withCredentials;
         }
-        else if (!!root_1.root.XDomainRequest) {
-            return new root_1.root.XDomainRequest();
-        }
-        else {
-            throw new Error('CORS is not supported by your browser');
-        }
+        return xhr;
+    }
+    else if (!!root_1.root.XDomainRequest) {
+        return new root_1.root.XDomainRequest();
     }
     else {
-        return xhr;
+        throw new Error('CORS is not supported by your browser');
+    }
+}
+function getXMLHttpRequest() {
+    if (root_1.root.XMLHttpRequest) {
+        return new root_1.root.XMLHttpRequest();
+    }
+    else {
+        var progId = void 0;
+        try {
+            var progIds = ['Msxml2.XMLHTTP', 'Microsoft.XMLHTTP', 'Msxml2.XMLHTTP.4.0'];
+            for (var i = 0; i < 3; i++) {
+                try {
+                    progId = progIds[i];
+                    if (new root_1.root.ActiveXObject(progId)) {
+                        break;
+                    }
+                }
+                catch (e) {
+                }
+            }
+            return new root_1.root.ActiveXObject(progId);
+        }
+        catch (e) {
+            throw new Error('XMLHttpRequest is not supported by your browser');
+        }
     }
 }
 function defaultGetResultSelector(response) {
@@ -69,8 +91,11 @@ var AjaxObservable = (function (_super) {
         _super.call(this);
         var request = {
             async: true,
-            createXHR: createXHRDefault,
+            createXHR: function () {
+                return this.crossDomain ? getCORSRequest.call(this) : getXMLHttpRequest();
+            },
             crossDomain: false,
+            withCredentials: false,
             headers: {},
             method: 'GET',
             responseType: 'json',
@@ -88,13 +113,16 @@ var AjaxObservable = (function (_super) {
         }
         this.request = request;
     }
+    AjaxObservable.prototype._subscribe = function (subscriber) {
+        return new AjaxSubscriber(subscriber, this.request);
+    };
     /**
      * Creates an observable for an Ajax request with either a request object with
      * url, headers, etc or a string for a URL.
      *
      * @example
      * source = Rx.Observable.ajax('/products');
-     * source = Rx.Observable.ajax( url: 'products', method: 'GET' });
+     * source = Rx.Observable.ajax({ url: 'products', method: 'GET' });
      *
      * @param {string|Object} request Can be one of the following:
      *   A string of the URL to make the Ajax call.
@@ -114,10 +142,6 @@ var AjaxObservable = (function (_super) {
      * @name ajax
      * @owner Observable
     */
-    AjaxObservable._create_stub = function () { return null; };
-    AjaxObservable.prototype._subscribe = function (subscriber) {
-        return new AjaxSubscriber(subscriber, this.request);
-    };
     AjaxObservable.create = (function () {
         var create = function (urlOrRequest) {
             return new AjaxObservable(urlOrRequest);
@@ -149,7 +173,7 @@ var AjaxSubscriber = (function (_super) {
             headers['X-Requested-With'] = 'XMLHttpRequest';
         }
         // ensure content type is set
-        if (!('Content-Type' in headers)) {
+        if (!('Content-Type' in headers) && !(root_1.root.FormData && request.body instanceof root_1.root.FormData)) {
             headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
         }
         // properly serialize body
@@ -218,15 +242,19 @@ var AjaxSubscriber = (function (_super) {
         else if (root_1.root.FormData && body instanceof root_1.root.FormData) {
             return body;
         }
-        var splitIndex = contentType.indexOf(';');
-        if (splitIndex !== -1) {
-            contentType = contentType.substring(0, splitIndex);
+        if (contentType) {
+            var splitIndex = contentType.indexOf(';');
+            if (splitIndex !== -1) {
+                contentType = contentType.substring(0, splitIndex);
+            }
         }
         switch (contentType) {
             case 'application/x-www-form-urlencoded':
                 return Object.keys(body).map(function (key) { return (encodeURI(key) + "=" + encodeURI(body[key])); }).join('&');
             case 'application/json':
                 return JSON.stringify(body);
+            default:
+                return body;
         }
     };
     AjaxSubscriber.prototype.setHeaders = function (xhr, headers) {
