@@ -2,40 +2,40 @@
   "_args": [
     [
       {
-        "raw": "/mnt/data/tmp/d-116919-13013-1uvq2yi/package.tgz",
+        "raw": "/tmp/d-1161015-4814-1um5jg2/package.tgz",
         "scope": null,
         "escapedName": null,
         "name": null,
-        "rawSpec": "/mnt/data/tmp/d-116919-13013-1uvq2yi/package.tgz",
-        "spec": "/mnt/data/tmp/d-116919-13013-1uvq2yi/package.tgz",
+        "rawSpec": "/tmp/d-1161015-4814-1um5jg2/package.tgz",
+        "spec": "/tmp/d-1161015-4814-1um5jg2/package.tgz",
         "type": "local"
       },
-      "/mnt/data/tmp/apm-install-dir-116919-13013-175xr43"
+      "/tmp/apm-install-dir-1161015-4814-in762u"
     ]
   ],
-  "_from": "../d-116919-13013-1uvq2yi/package.tgz",
-  "_id": "activate-power-mode@1.0.2",
+  "_from": "../d-1161015-4814-1um5jg2/package.tgz",
+  "_id": "activate-power-mode@1.1.0",
   "_inCache": true,
   "_installable": true,
   "_location": "/activate-power-mode",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "/mnt/data/tmp/d-116919-13013-1uvq2yi/package.tgz",
+    "raw": "/tmp/d-1161015-4814-1um5jg2/package.tgz",
     "scope": null,
     "escapedName": null,
     "name": null,
-    "rawSpec": "/mnt/data/tmp/d-116919-13013-1uvq2yi/package.tgz",
-    "spec": "/mnt/data/tmp/d-116919-13013-1uvq2yi/package.tgz",
+    "rawSpec": "/tmp/d-1161015-4814-1um5jg2/package.tgz",
+    "spec": "/tmp/d-1161015-4814-1um5jg2/package.tgz",
     "type": "local"
   },
   "_requiredBy": [
     "#USER"
   ],
-  "_resolved": "file:../d-116919-13013-1uvq2yi/package.tgz",
-  "_shasum": "db4d42300c5d25a56810b14d941a827dafa455c9",
+  "_resolved": "file:../d-1161015-4814-1um5jg2/package.tgz",
+  "_shasum": "b183484661fd5b23c6e6c46c7a83cbaeced1e0c6",
   "_shrinkwrap": null,
-  "_spec": "/mnt/data/tmp/d-116919-13013-1uvq2yi/package.tgz",
-  "_where": "/mnt/data/tmp/apm-install-dir-116919-13013-175xr43",
+  "_spec": "/tmp/d-1161015-4814-1um5jg2/package.tgz",
+  "_where": "/tmp/apm-install-dir-1161015-4814-in762u",
   "author": {
     "name": "Joel Besada",
     "email": "joel@joelb.me",
@@ -68,5 +68,5 @@
     "type": "git",
     "url": "git+https://github.com/JoelBesada/activate-power-mode.git"
   },
-  "version": "1.0.2"
+  "version": "1.1.0"
 }

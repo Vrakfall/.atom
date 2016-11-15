@@ -8,3 +8,6 @@ compile-cache
 dev
 storage
 local-history
+recovery
+split-diff
+./nohup.out
