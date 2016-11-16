@@ -1,4 +1,6 @@
 "*":
+  "ambiance-pro-ui":
+    iconTheme: "Octicons"
   "atom-beautify":
     general:
       _analyticsUserId: "019f9d48-7924-4bb0-aaea-26e23f3b3ec2"
@@ -35,7 +37,8 @@
     showIndentGuide: true
     showInvisibles: true
     softWrap: true
-  "emoji-syntax": {}
+  "emoji-syntax":
+    emojiStyles: "Noto Emoji"
   "exception-reporting":
     userId: "7a697316-9921-f1d7-de82-6a644c2fb377"
   "git-diff": {}

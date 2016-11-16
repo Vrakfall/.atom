@@ -1,0 +1,59 @@
+@import "ui-variables";
+
+.tree-view {
+	background: @tree-view-background-color;
+
+	.selected:before, .selected > .header {
+		background: @background-color-selected;
+	}
+
+	.selected > .name,
+	.selected > .name:before,
+	.selected > .list-item > .name,
+	.selected > .list-item > .name:before {
+		color: #fff !important;
+	}
+}
+.tree-view {
+	.icon:before { color: @tree-view-icon-color !important; }
+}
+.list-group, .list-tree{
+
+	li:not(.list-nested-item).status-ignored,
+	li.list-nested-item.status-ignored > .list-item {
+		.icon:before { color: inherit!important; }
+	}
+}
+/* selector precedence hacks for working with file-icons package */
+body.file-icons-colourless .tree-view {
+	.icon:before { color: @tree-view-icon-color !important; }
+}
+body.file-icons-on-changes .tree-view {
+	.file.entry.list-item:not(.status-modified):not(.status-added) {
+		.name.icon:before { color: @tree-view-icon-color !important;}
+		&.selected .name.icon:before { color: inherit !important;}
+	}
+	.entry.list-item.status-modified {
+		.icon:before { color: inherit !important; }
+	}
+	.list-group, .list-tree {
+		li:not(.list-nested-item).status-modified,
+		li.list-nested-item.status-modified > .list-item {
+			.icon:before { color: inherit !important; }
+		}
+	}
+}
+
+.tree-view-resizer {
+	padding-right: 5px;
+}
+
+.tree-view-resize-handle {
+	border: 5px solid shade(@tree-view-border-color, 0.84);
+}
+
+[data-ambiance-pro-ui-icon-theme='no-icons'] {
+	.tree-view {
+		.icon:before { display: none;}
+	}
+}

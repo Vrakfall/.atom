@@ -10,4 +10,4 @@ storage
 local-history
 recovery
 split-diff
-./nohup.out
+/nohup.out

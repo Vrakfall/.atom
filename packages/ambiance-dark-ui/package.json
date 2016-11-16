@@ -1,0 +1,60 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "/tmp/d-1161015-12815-16p4x2e/package.tgz",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "/tmp/d-1161015-12815-16p4x2e/package.tgz",
+        "spec": "/tmp/d-1161015-12815-16p4x2e/package.tgz",
+        "type": "local"
+      },
+      "/tmp/apm-install-dir-1161015-12815-j0c7fk"
+    ]
+  ],
+  "_from": "../d-1161015-12815-16p4x2e/package.tgz",
+  "_id": "ambiance-dark-ui@0.51.1",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/ambiance-dark-ui",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "/tmp/d-1161015-12815-16p4x2e/package.tgz",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "/tmp/d-1161015-12815-16p4x2e/package.tgz",
+    "spec": "/tmp/d-1161015-12815-16p4x2e/package.tgz",
+    "type": "local"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "file:../d-1161015-12815-16p4x2e/package.tgz",
+  "_shasum": "027dfdc1da5a571695f255aaa6816c8669d983a9",
+  "_shrinkwrap": null,
+  "_spec": "/tmp/d-1161015-12815-16p4x2e/package.tgz",
+  "_where": "/tmp/apm-install-dir-1161015-12815-j0c7fk",
+  "bugs": {
+    "url": "https://github.com/tgaurnier/Atom-AmbianceDark-UI/issues"
+  },
+  "dependencies": {},
+  "description": "Based off of Ubuntu's Ambiance theme, but darkened",
+  "devDependencies": {},
+  "engines": {
+    "atom": ">0.40.0"
+  },
+  "homepage": "https://github.com/tgaurnier/Atom-AmbianceDark-UI#readme",
+  "license": "MIT",
+  "name": "ambiance-dark-ui",
+  "optionalDependencies": {},
+  "readme": "# Atom-AmbianceDark-UI\n\nAmbiance Dark UI theme for Atom text editor\n\nThis theme is based off of Ubuntu's Ambiance theme, but darkened. Forked from [atom-dark-ui](https://github.com/atom/atom-dark-ui) theme.\n\n![](https://github.com/tgaurnier/Atom-AmbianceDark-UI/blob/master/Screenshot.png?raw=true)\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tgaurnier/Atom-AmbianceDark-UI.git"
+  },
+  "theme": "ui",
+  "version": "0.51.1"
+}

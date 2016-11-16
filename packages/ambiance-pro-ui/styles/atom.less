@@ -1,0 +1,35 @@
+@import "ui-variables";
+
+atom-workspace {
+  background-color: @app-background-color;
+  border-top: 1px solid rgba(0, 0, 0, .4);
+}
+
+::-webkit-scrollbar {
+  // -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  background: @scrollbar-background-color;
+  //
+  // &:hover {
+  //   width: 13px;
+  //   height: 13px;
+  // }
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: @scrollbar_track_color;
+}
+
+::-webkit-scrollbar-thumb {
+  background: @scrollbar-color;
+  border: 3px solid @scrollbar-background-color;
+  border-radius: 6.5px;
+  box-shadow: none !important;
+
+  &:hover,
+  &:active {
+    background: @scrollbar-color-hover;
+  }
+}

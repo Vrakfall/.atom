@@ -1,0 +1,188 @@
+@import "ui-variables";
+@import "syntax-variables";
+
+@tab-top-margin: 3px;
+@tab-height: 32px;
+@tab-total-height: @tab-top-margin + @tab-height;
+@tab-bg-gradient-spacing: @tab-total-height - 1px;
+
+@tab-bar-shadow: inset 0 4px 4px -2px fade(@text_color, 15%);
+@tab-active-shadow: inset 0 4px 4px -2px fade(@text_color, 10%);
+@tab-hover-shadow: inset 0 4px 4px -2px fade(@text_color, 5%);
+@modified-icon-width: 8px;
+
+@tab-bar-background: repeating-linear-gradient(to bottom,
+  @tab-bar-background-color,
+  @tab-bar-background-color @tab-bg-gradient-spacing,
+  @borders_color @tab-bg-gradient-spacing,
+  @borders_color @tab-bg-gradient-spacing + 1px);
+
+.tab-bar {
+  height: auto;
+  background: @tab-bar-background-color;
+  box-shadow: @tab-bar-shadow;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  flex-wrap: wrap;
+  // padding: 0 5px;
+  margin-top: -@tab-top-margin;
+  position: relative;
+  .tab {
+    -webkit-flex: auto;
+    flex: auto;
+    display: block;
+    max-width: none;
+    text-align: center;
+    vertical-align: text-top;
+    line-height: @tab-height;
+    height: @tab-total-height;
+    // border-width: 0 1px 2px 1px;
+    // border-color: transparent;
+    // border-style: solid;
+    padding: 4px 6px 2px 6px;
+    // padding-top: @tab-top-margin;
+    // padding-right: 30px;
+    // font-weight: bold;
+    font-size: inherit;
+    background: @tab-background-color;
+    color: @tab-bar-text-color;
+    position: relative;
+    z-index: 0;
+    // border-radius:3px;
+
+    // margin-left: 4px;
+    // margin-right: 4px;
+
+    // border: 0 0 1px solid shade(@bg_color, 0.9);
+    // border-top: 2px;
+
+    border-image-source: linear-gradient(to bottom,
+                                fade(shade(@bg_color, 0.9), 0.0),
+                                shade(@bg_color, 0.9));
+    border-image-width: 0 1px;
+
+    .title {
+      opacity: 0.8;
+      &::before {
+        font-weight: normal;
+      }
+    }
+
+    &:hover {
+      background: @tab-background-color-hover;
+      // border-color:
+      //   transparent
+      //   @tab-hover-border-color
+      //   @tab-hover-highlight-color
+      //   @tab-hover-border-color;
+      color: @tab-bar-text-color-hover;
+      // border-bottom-width: 3px;
+      // box-shadow: @tab-hover-shadow;
+    }
+
+    &.active, &.active:hover {
+      -webkit-flex: auto;
+      flex: auto;
+      z-index: 1;
+      // border-color:
+      //   transparent
+      //   @tab-border-color
+      //   @tab-highlight-color
+      //   @tab-border-color;
+      // background: @tab-background-color-active;
+      // box-shadow: @tab-active-shadow;
+      color: @tab-bar-text-color-active;
+      // border-bottom-width: 3px;
+      // background-color: @bg_color;
+      // border-color: @focus_color;
+      // border-top-width: 1px;
+      // border-bottom-width: 0;
+      background: @tab-background-color-active;
+      // padding-bottom: 3px;
+      border-image-source: url(atom://ambiance-pro-ui/assets/notebook-tab-top.png);
+      border-image-slice: 8 10 1 10;
+      border-image-width: 8px 10px 1px 10px;
+      border-image-repeat: stretch;
+      margin-top: 1px;
+      margin-bottom: -1px;
+
+      // &[data-type="TextEditor"] {
+        // background-image: linear-gradient(to bottom, @tab-background-color-active 80%, @syntax-background-color);
+        // background-origin: border-box;
+        // color: @syntax-text-color;
+      // }
+
+      .title {
+        margin-top: -2px;
+        opacity: 1;
+      }
+    }
+    // &.active:hover {
+    //   background-color: @bg_color;
+    //   box-shadow: inset 0 4px 4px -2px fade(@text_color, 4%);
+    // }
+    // &.active .title {
+    //   padding-right: 0;
+    // }
+
+    .close-icon {
+      top: 1px;
+      color: fade(@text-color, 40%);
+      &::before {
+        padding-top: 2px;
+        width: 19px;
+        height: 19px;
+        border: 1px solid transparent;
+        border-radius:3px;
+      }
+      &:active {
+        &::before {
+          padding-top: 2px;
+          background: linear-gradient(to bottom, fade(@text_color, 10%), fade(@text_color, 0%));
+          border: 1px solid @button-border-color;
+        }
+      }
+      &:hover {
+        &::before {
+          border: 1px solid @button-border-color;
+        }
+        color: @text-color;
+      }
+    }
+    &.modified:hover .close-icon {
+      &:hover {
+        color: @text-color;
+      }
+      &::before {
+        padding-top: 2px;
+        box-shadow: inset 0 0 2px 2px fade(@tab-highlight-color, 45%);
+      }
+      &:hover::before {
+        padding-top: 2px;
+      }
+
+      &:active::before {
+        background: linear-gradient(to bottom, fade(@tab-highlight-color, 30%), fade(@tab-highlight-color, 15%) 30%, fade(@tab-highlight-color, 5%));
+        box-shadow: none;
+      }
+      color: @text-color;
+    }
+    &.modified:not(:hover) .close-icon {
+      right: 15px;
+      // top: 12.5px;
+      top: @tab-total-height/2 - @modified-icon-width/2 - 1px;
+      width: @modified-icon-width;
+      height: @modified-icon-width;
+    }
+  }
+}
+
+atom-pane .item-views {
+  border-image-source: url(atom://ambiance-pro-ui/assets/notebook-tab-top.png);
+  border-image-slice: 8 10 1 10;
+  border-image-width: 8px 0 0;
+  border-image-repeat: stretch;
+  border: 2px 0 0;
+}

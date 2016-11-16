@@ -1,0 +1,431 @@
+@import "syntax-variables";
+
+
+/**
+ * General editor styles
+ */
+atom-text-editor, :host {
+	background-color: @syntax-background-color;
+	color: @syntax-text-color;
+
+    // Guides and invisible characters
+	.wrap-guide {
+		background-color: @syntax-wrap-guide-color;
+	}
+	.indent-guide {
+		color: @syntax-indent-guide-color;
+	}
+    .indent-guide-improved.indent-guide-stack.indent-guide-active {
+        background-color: @syntax-result-marker-color;
+    }
+	.invisible-character {
+		color: @syntax-invisible-character-color;
+	}
+    .bracket-matcher .region {
+        background-color: @syntax-selection-color;
+        border: 1px solid @syntax-result-marker-color;
+    }
+
+	// Gutter
+	.gutter {
+		background-color: @syntax-gutter-background-color;
+		color: @syntax-gutter-text-color;
+
+		.line-number {
+			&.cursor-line {
+				background-color: @syntax-gutter-background-color-selected;
+				color: @syntax-gutter-text-color-selected;
+			}
+
+			&.cursor-line-no-selection {
+				color: @syntax-gutter-text-color-selected;
+			}
+		}
+	}
+	.gutter .line-number.folded,
+	.gutter .line-number:after,
+	.fold-marker:after {
+		color: @ambiance-gray-light;
+	}
+
+	// Selection
+	.selection .region {
+		background-color: @syntax-selection-color;
+	}
+
+	// Search result marker
+	.search-results .marker .region,
+	.search-results .marker .region {
+		background-color: transparent;
+		border: 1px solid @syntax-result-marker-color;
+	}
+	.search-results .marker.current-result .region,
+	.search-results .marker.current-result .region {
+		border: 1px solid @syntax-result-marker-color-selected;
+	}
+}
+
+.todo {
+	color: @red !important;
+	font-weight: bold !important;
+}
+
+
+/**
+ * General syntax for most languages
+ */
+.keyword {
+	color: @syntax-keyword-color;
+	font-weight: bold;
+
+	&.control {
+		color: @syntax-control-color;
+	}
+
+	&.operator {
+		color: @syntax-text-color;
+	}
+
+	&.other.special-method {
+		color: @syntax-method-color;
+	}
+
+	&.other.unit {
+		color: @green !important;
+	}
+}
+
+.comment {
+	color: @syntax-comment-color;
+}
+
+.storage {
+	color: @ubuntu-orange-dark;
+}
+
+.constant {
+	color: @syntax-constant-color;
+	font-weight: bold;
+
+	&.character.escape {
+		color: @syntax-string-color;
+	}
+
+	&.numeric {
+		color: @green;
+	}
+
+	&.other.color {
+		color: @green;
+	}
+	// NOTE: Uncomment this for rainbow effect on RGB values
+	// &.other.rgb-value {
+	// 	background: -webkit-linear-gradient(left, @red, @green, @blue);
+	// 	-webkit-background-clip: text;
+	// 	-webkit-text-fill-color: transparent;
+	// }
+
+	&.other.symbol {
+		color: @blue;
+	}
+}
+
+.storage.type.primitive {
+	color: @syntax-primitive-color !important;
+}
+
+
+.invalid.illegal {
+	background-color: @red;
+	color: @syntax-background-color;
+}
+
+.string {
+	color: @syntax-string-color;
+
+
+	&.regexp {
+		color: @blue;
+
+		.source.ruby.embedded {
+			color: @red;
+		}
+	}
+
+	&.other.link {
+		color: @aubergine-very-light;
+	}
+}
+
+.punctuation {
+	&.begin, &.end, &.separator {
+		color: @white;
+		font-weight: bold;
+	}
+	&.definition {
+		&.comment {
+			color: @syntax-comment-color;
+		}
+
+		&.string,
+		&.variable,
+		&.parameters,
+		&.array {
+			color: @syntax-text-color;
+		}
+
+		&.heading,
+		&.identity {
+			color: @tan;
+		}
+
+		&.bold {
+			color: @ambiance-gray-very-light;
+			font-weight: bold;
+		}
+
+		&.italic {
+			color: @ambiance-gray-very-light;
+			font-style: italic;
+		}
+	}
+
+	&.section.embedded {
+		color: @blue;
+	}
+
+}
+
+
+/**
+ * Variables
+ */
+.variable, .punctuation.variable {
+	color: @syntax-variable-color !important;
+}
+
+
+/**
+ * XML, HTML, and CSS styles
+ */
+.name.tag, .punctuation.tag {
+	color: @syntax-tag-color;
+	font-weight: bold;
+}
+.property-name {
+	color: @syntax-primitive-color;
+	font-style: italic;
+}
+.attribute-name {
+	color: @syntax-class-color;
+	&.class {
+		color: @syntax-class-color;
+	}
+
+	&.pseudo-class {
+		color: @red;
+		font-weight: bold;
+	}
+
+	&.id {
+		color: @syntax-keyword-color;
+		font-weight: bold;
+	}
+}
+.important {
+	color: @red !important;
+	font-weight: normal !important;
+	font-style: italic !important;
+}
+.js.embedded {
+	.storage.type {
+		color: @brown-light !important;
+	}
+	.storage.modifier {
+		color: lighten(@ubuntu-orange-light, 10%) !important;
+		font-weight: bold;
+	}
+	.constant:not(.numeric) {
+		color: @syntax-class-color !important;
+	}
+	.keyword.control {
+		color: @red !important;
+	}
+	.function.name,
+	.function > .delimiter .methodparens .punctuation,
+	.function > .parameters.punctuation.begin,
+	.function > .parameters.punctuation.end,
+	.entity.function.js,
+	.support.function.js {
+		color: @brown !important;
+		font-weight: normal !important;
+	}
+}
+.tag.sgml .tag {
+	color: @syntax-preprocessor-color !important;
+	font-weight: bold;
+}
+
+.elements {
+	color: @syntax-tag-color !important;
+	font-weight: normal !important;
+}
+
+
+/**
+ * Programmatic styles
+ */
+
+// Preprocessor, includes, and imports
+.preprocessor,
+.include .include,
+.include, .include .string,
+.import,
+.import .keyword,
+.import .punctuation,
+.import + .string, .import + .string .string,
+.import + .string + .punctuation {
+    color: @syntax-preprocessor-color !important;
+    font-weight: bold;
+}
+
+// Classes methods and functions
+.class.name, .type.name, .storage.type {
+	color: @syntax-class-color;
+}
+
+.type.name.inherited, .inherited-class {
+	color: @syntax-class-color;
+	font-style: italic;
+}
+
+.storage.modifier:not(.import):not(.package) {
+	color: @syntax-tag-color;
+}
+
+.function.any-method,
+.method.name,
+.method-call > .method, .method-call > .method ~ .method-parameters {
+	color: @syntax-method-color;
+}
+
+.function.name,
+.function.misc,
+.function.misc ~ .function.punctuation,
+.function.makefile,
+.function.shell,
+.function > .delimiter .methodparens .punctuation,
+.function > .parameters.punctuation.begin,
+.function > .parameters.punctuation.end,
+.function > .parens > .punctuation.parens,
+.function.js {
+	color: @syntax-function-color;
+	font-weight: bold;
+}
+
+
+/**
+ * Java styles
+ */
+.package {
+	color: @syntax-preprocessor-color;
+	font-style: italic !important;
+	font-weight: normal !important;
+}
+
+
+/**
+ * Makefile specific
+ */
+// TODO: When language-make properly separates targets from recipes, get this working.
+// .target > .target,
+// .target > .target > .string.interpolated > .variable,
+// .target > .recipe,
+// .target > .recipe > .string.interpolated > .variable {
+// 	color: @syntax-class-color !important;
+// }
+
+// .recipe.makefile {
+// 	color: @syntax-tag-color !important;
+// }
+
+
+/**
+ * Other/unknown styles
+ */
+.entity {
+	&.name.section {
+		color: @tan;
+	}
+}
+
+.source.gfm .markup {
+	-webkit-font-smoothing: auto;
+	&.heading {
+		color: @syntax-preprocessor-color;
+		font-weight: bold;
+	}
+}
+
+.meta {
+	&.link {
+		color: @aubergine-very-light;
+	}
+
+	&.require {
+		color: @blue;
+	}
+
+	&.selector {
+		color: @ubuntu-orange-light;
+	}
+
+	&.separator {
+		background-color: @ambiance-gray-medium;
+		color: @syntax-text-color;
+	}
+}
+
+.none {
+	color: @syntax-text-color;
+}
+
+.markup {
+	&.bold {
+		color: @ubuntu-orange-light;
+		font-weight: bold;
+	}
+
+	&.changed {
+		color: @brown-light;
+	}
+
+	&.deleted {
+		color: @red;
+	}
+
+	&.italic {
+		color: @ambiance-gray-very-light;
+		font-style: italic;
+	}
+
+	&.heading .punctuation.definition.heading {
+		color: @tan;
+	}
+
+	&.inserted {
+		color: @green;
+	}
+
+	&.list {
+		color: @brown-light;
+	}
+
+	&.quote {
+		color: @syntax-string-color;
+	}
+
+	&.raw.inline {
+		color: @green;
+	}
+}
